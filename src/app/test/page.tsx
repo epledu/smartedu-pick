@@ -35,10 +35,10 @@ const TESTS = [
     emoji: '👶',
     title: '우리 아이 학습 성향 분석',
     desc: '아이에게 맞는 교육법을 알아보세요',
-    meta: '약 4분',
-    href: '#',
-    active: false,
-    badge: null,
+    meta: '약 3분 | 참여자 856명',
+    href: '/test/child-type',
+    active: true,
+    badge: 'NEW',
   },
 ];
 

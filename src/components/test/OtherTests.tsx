@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 interface OtherTestsProps {
-  currentTest?: 'learning-style' | 'ai-literacy';
+  currentTest?: 'learning-style' | 'ai-literacy' | 'child-type';
 }
 
 const ALL_TESTS = [
@@ -22,12 +22,12 @@ const ALL_TESTS = [
     active: true,
   },
   {
-    id: 'child-learning',
+    id: 'child-type',
     emoji: '👶',
     title: '우리 아이 학습 성향 분석',
     desc: '아이에게 맞는 교육법을 알아보세요',
-    href: '#',
-    active: false,
+    href: '/test/child-type',
+    active: true,
   },
 ];
 

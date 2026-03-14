@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import CTASection from '@/components/home/CTASection';
+import { getAllArticles } from '@/lib/articles';
+import { getCategoryById } from '@/data/categories';
 
 const PICK_TESTS = [
   {
@@ -20,7 +22,7 @@ const PICK_TESTS = [
     emoji: '👶',
     title: '우리 아이 학습 성향 분석',
     desc: '아이에게 맞는 교육법을 알아보세요',
-    href: '/test',
+    href: '/test/child-type',
     badge: 'NEW',
   },
 ];
@@ -46,25 +48,8 @@ const AI_TOOLS = [
   },
 ];
 
-const ARTICLES = [
-  {
-    title: '2026년 AI 코스웨어, 학교 현장에서 정말 효과가 있을까?',
-    desc: '현직 에듀테크 전문가가 직접 경험한 AI 코스웨어 도입 현장 이야기',
-    date: '준비 중',
-  },
-  {
-    title: 'ChatGPT vs Claude vs Gemini, 교육용으로 가장 좋은 AI는?',
-    desc: '교사와 학생 관점에서 비교한 3대 AI 챗봇 가이드',
-    date: '준비 중',
-  },
-  {
-    title: '학부모를 위한 AI 교육 가이드: 우리 아이 AI 시대 준비',
-    desc: '아이의 AI 리터러시를 키우는 가정 내 실천법',
-    date: '준비 중',
-  },
-];
-
 export default function Home() {
+  const articles = getAllArticles().slice(0, 3);
   return (
     <>
       {/* Hero Section */}
@@ -185,20 +170,31 @@ export default function Home() {
             <p className="text-text-secondary">교육 AI 트렌드와 활용법</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ARTICLES.map((article) => (
-              <div
-                key={article.title}
-                className="rounded-2xl border border-border bg-surface p-6 transition-all hover:-translate-y-1 hover:shadow-md"
-              >
-                <span className="mb-3 inline-block rounded-full bg-text-secondary/10 px-3 py-1 text-xs text-text-secondary">
-                  {article.date}
-                </span>
-                <h3 className="mb-2 text-base font-bold leading-snug text-text-primary">
-                  {article.title}
-                </h3>
-                <p className="text-sm text-text-secondary">{article.desc}</p>
-              </div>
-            ))}
+            {articles.map((article) => {
+              const cat = getCategoryById(article.category);
+              return (
+                <Link
+                  key={article.slug}
+                  href={`/articles/${article.slug}`}
+                  className="group rounded-2xl border border-border bg-surface p-6 transition-all hover:-translate-y-1 hover:shadow-md"
+                >
+                  {cat && (
+                    <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                      {cat.emoji} {cat.label}
+                    </span>
+                  )}
+                  <h3 className="mb-2 text-base font-bold leading-snug text-text-primary group-hover:text-primary">
+                    {article.title}
+                  </h3>
+                  <p className="mb-3 text-sm text-text-secondary line-clamp-2">
+                    {article.description}
+                  </p>
+                  <span className="text-xs text-text-secondary">
+                    📅 {article.publishedAt.replace(/-/g, '.')} · ⏱ {article.readingTime} 읽기
+                  </span>
+                </Link>
+              );
+            })}
           </div>
           <div className="mt-8 text-center">
             <Link

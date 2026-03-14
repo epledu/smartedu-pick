@@ -6,14 +6,14 @@ const PICK_TESTS = [
     emoji: '📋',
     title: '나의 학습유형 테스트',
     desc: '나에게 딱 맞는 공부법을 찾아보세요',
-    href: '/test',
+    href: '/test/learning-style',
     badge: 'PICK',
   },
   {
     emoji: '🤖',
     title: 'AI 활용 능력 진단',
     desc: '당신의 AI 레벨은? Lv.1~Lv.5',
-    href: '/test',
+    href: '/test/ai-literacy',
     badge: 'HOT',
   },
   {

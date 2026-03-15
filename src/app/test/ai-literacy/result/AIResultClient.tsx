@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useState } from 'react';
 import Link from 'next/link';
 import { event as gaEvent } from '@/lib/analytics';
+import { shareKakao } from '@/lib/kakao';
 import { aiLevels, DIFFICULTY_COLORS } from '@/data/tests/ai-literacy';
 import type { AILevel, AILevelInfo } from '@/data/tests/ai-literacy';
 import { calculateExpProgress } from '@/lib/test-utils';
@@ -92,8 +93,12 @@ function ShareButtons({ levelInfo }: { levelInfo: AILevelInfo }) {
 
   const handleKakaoShare = () => {
     gaEvent('share', { method: 'kakao', content_type: 'test_result' });
-    const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-    window.open(kakaoUrl, '_blank', 'width=600,height=400');
+    shareKakao({
+      title: `나는 ${levelInfo.emoji} ${levelInfo.title}!`,
+      description: '스마트에듀픽에서 테스트 해보세요!',
+      linkUrl: shareUrl,
+      buttonTitle: '테스트 해보기',
+    });
   };
 
   const handleTwitterShare = () => {

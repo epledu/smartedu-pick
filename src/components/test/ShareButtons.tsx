@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { event as gaEvent } from '@/lib/analytics';
+import { shareKakao } from '@/lib/kakao';
 import type { LearningTypeInfo } from '@/data/tests/learning-style';
 
 interface ShareButtonsProps {
@@ -35,8 +36,12 @@ export default function ShareButtons({ typeInfo }: ShareButtonsProps) {
 
   const handleKakaoShare = () => {
     gaEvent('share', { method: 'kakao', content_type: 'test_result' });
-    const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-    window.open(kakaoUrl, '_blank', 'width=600,height=400');
+    shareKakao({
+      title: `나는 ${typeInfo.emoji}${typeInfo.label}!`,
+      description: '스마트에듀픽에서 테스트 해보세요!',
+      linkUrl: shareUrl,
+      buttonTitle: '테스트 해보기',
+    });
   };
 
   const handleTwitterShare = () => {

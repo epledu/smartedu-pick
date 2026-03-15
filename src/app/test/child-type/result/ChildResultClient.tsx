@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useState } from 'react';
 import Link from 'next/link';
 import { event as gaEvent } from '@/lib/analytics';
+import { shareKakao } from '@/lib/kakao';
 import { childTypes, combinations, AGE_RANGE_COLORS } from '@/data/tests/child-type';
 import type { ChildType } from '@/data/tests/child-type';
 import { getChildScorePercentages } from '@/lib/test-utils';
@@ -39,8 +40,12 @@ function ChildShareButtons({ primaryLabel, animal }: { primaryLabel: string; ani
 
   const handleKakaoShare = () => {
     gaEvent('share', { method: 'kakao', content_type: 'test_result' });
-    const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
-    window.open(kakaoUrl, '_blank', 'width=600,height=400');
+    shareKakao({
+      title: `우리 아이는 ${animal.split(' ')[0]} ${primaryLabel}!`,
+      description: '스마트에듀픽에서 테스트 해보세요!',
+      linkUrl: shareUrl,
+      buttonTitle: '테스트 해보기',
+    });
   };
 
   const handleTwitterShare = () => {

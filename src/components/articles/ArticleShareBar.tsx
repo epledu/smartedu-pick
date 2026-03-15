@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { event as gaEvent } from '@/lib/analytics';
+import { shareKakao } from '@/lib/kakao';
 
 interface ArticleShareBarProps {
   title: string;
@@ -38,11 +39,12 @@ export default function ArticleShareBar({ title, slug }: ArticleShareBarProps) {
       <button
         onClick={() => {
           gaEvent('share', { method: 'kakao', content_type: 'article' });
-          window.open(
-            `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
-            '_blank',
-            'width=600,height=400'
-          );
+          shareKakao({
+            title,
+            description: `${title} | 스마트에듀픽`,
+            linkUrl: shareUrl,
+            buttonTitle: '아티클 읽기',
+          });
         }}
         className="inline-flex h-9 items-center gap-1.5 rounded-full px-4 text-xs font-semibold text-[#3B1E1E] transition-all hover:brightness-95 active:scale-95"
         style={{ backgroundColor: '#FEE500' }}

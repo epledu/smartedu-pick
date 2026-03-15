@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { aiQuestions } from '@/data/tests/ai-literacy';
 import { calculateAILevel } from '@/lib/test-utils';
+import { event as gaEvent } from '@/lib/analytics';
 import TestProgress from '@/components/test/TestProgress';
 
 type Phase = 'intro' | 'questions' | 'calculating';
@@ -17,6 +18,7 @@ export default function AILiteracyTestPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleStart = () => {
+    gaEvent('test_start', { test_name: 'ai-literacy' });
     setPhase('questions');
   };
 
@@ -37,6 +39,7 @@ export default function AILiteracyTestPage() {
         setPhase('calculating');
         const level = calculateAILevel(newScores);
         const totalScore = newScores.reduce((sum, s) => sum + s, 0);
+        gaEvent('test_complete', { test_name: 'ai-literacy', result_type: `Lv.${level}` });
         setTimeout(() => {
           router.push(`/test/ai-literacy/result?level=${level}&score=${totalScore}`);
         }, 1200);

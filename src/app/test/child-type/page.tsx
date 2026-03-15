@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { childQuestions } from '@/data/tests/child-type';
 import type { ChildType } from '@/data/tests/child-type';
 import { calculateChildType } from '@/lib/test-utils';
+import { event as gaEvent } from '@/lib/analytics';
 import TestProgress from '@/components/test/TestProgress';
 
 type Phase = 'intro' | 'questions' | 'calculating';
@@ -18,6 +19,7 @@ export default function ChildTypeTestPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleStart = () => {
+    gaEvent('test_start', { test_name: 'child-type' });
     setPhase('questions');
   };
 
@@ -37,6 +39,7 @@ export default function ChildTypeTestPage() {
       } else {
         setPhase('calculating');
         const result = calculateChildType(newAnswers);
+        gaEvent('test_complete', { test_name: 'child-type', result_type: result.primary });
         const answersParam = newAnswers.join(',');
         setTimeout(() => {
           router.push(

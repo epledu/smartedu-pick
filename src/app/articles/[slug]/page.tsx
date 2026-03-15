@@ -7,6 +7,7 @@ import ArticleTOC from '@/components/articles/ArticleTOC';
 import RelatedTests from '@/components/articles/RelatedTests';
 import RelatedArticles from '@/components/articles/RelatedArticles';
 import ArticleShareBar from '@/components/articles/ArticleShareBar';
+import ArticleViewTracker from '@/components/articles/ArticleViewTracker';
 import NewsletterCTA from '@/components/articles/NewsletterCTA';
 
 interface PageProps {
@@ -109,6 +110,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
         />
       )}
 
+      <ArticleViewTracker slug={slug} />
       <div className="py-12 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           {/* Article Header */}

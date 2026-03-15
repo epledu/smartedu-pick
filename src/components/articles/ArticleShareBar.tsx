@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { event as gaEvent } from '@/lib/analytics';
 
 interface ArticleShareBarProps {
   title: string;
@@ -14,6 +15,7 @@ export default function ArticleShareBar({ title, slug }: ArticleShareBarProps) {
   const shareText = `${title} | 스마트에듀픽`;
 
   const handleCopy = async () => {
+    gaEvent('share', { method: 'url_copy', content_type: 'article' });
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -34,26 +36,28 @@ export default function ArticleShareBar({ title, slug }: ArticleShareBarProps) {
         {copied ? '✓ 복사됨' : '🔗 URL'}
       </button>
       <button
-        onClick={() =>
+        onClick={() => {
+          gaEvent('share', { method: 'kakao', content_type: 'article' });
           window.open(
             `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
             '_blank',
             'width=600,height=400'
-          )
-        }
+          );
+        }}
         className="inline-flex h-9 items-center gap-1.5 rounded-full px-4 text-xs font-semibold text-[#3B1E1E] transition-all hover:brightness-95 active:scale-95"
         style={{ backgroundColor: '#FEE500' }}
       >
         💬 카카오톡
       </button>
       <button
-        onClick={() =>
+        onClick={() => {
+          gaEvent('share', { method: 'twitter', content_type: 'article' });
           window.open(
             `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
             '_blank',
             'width=600,height=400'
-          )
-        }
+          );
+        }}
         className="inline-flex h-9 items-center gap-1.5 rounded-full bg-black px-4 text-xs font-semibold text-white transition-all hover:bg-gray-800 active:scale-95"
       >
         𝕏 트위터

@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useState } from 'react';
 import Link from 'next/link';
+import { event as gaEvent } from '@/lib/analytics';
 import { childTypes, combinations, AGE_RANGE_COLORS } from '@/data/tests/child-type';
 import type { ChildType } from '@/data/tests/child-type';
 import { getChildScorePercentages } from '@/lib/test-utils';
@@ -19,6 +20,7 @@ function ChildShareButtons({ primaryLabel, animal }: { primaryLabel: string; ani
   const shareText = `우리 아이는 ${animal.split(' ')[0]} ${primaryLabel}! 우리 아이 학습 성향 분석해보기 →`;
 
   const handleCopyUrl = async () => {
+    gaEvent('share', { method: 'url_copy', content_type: 'test_result' });
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -36,11 +38,13 @@ function ChildShareButtons({ primaryLabel, animal }: { primaryLabel: string; ani
   };
 
   const handleKakaoShare = () => {
+    gaEvent('share', { method: 'kakao', content_type: 'test_result' });
     const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
     window.open(kakaoUrl, '_blank', 'width=600,height=400');
   };
 
   const handleTwitterShare = () => {
+    gaEvent('share', { method: 'twitter', content_type: 'test_result' });
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };

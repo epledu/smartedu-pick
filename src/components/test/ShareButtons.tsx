@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { event as gaEvent } from '@/lib/analytics';
 import type { LearningTypeInfo } from '@/data/tests/learning-style';
 
 interface ShareButtonsProps {
@@ -14,6 +15,7 @@ export default function ShareButtons({ typeInfo }: ShareButtonsProps) {
   const shareText = `나는 ${typeInfo.emoji}${typeInfo.label}! 나의 학습유형 테스트 해보기 →`;
 
   const handleCopyUrl = async () => {
+    gaEvent('share', { method: 'url_copy', content_type: 'test_result' });
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -32,11 +34,13 @@ export default function ShareButtons({ typeInfo }: ShareButtonsProps) {
   };
 
   const handleKakaoShare = () => {
+    gaEvent('share', { method: 'kakao', content_type: 'test_result' });
     const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
     window.open(kakaoUrl, '_blank', 'width=600,height=400');
   };
 
   const handleTwitterShare = () => {
+    gaEvent('share', { method: 'twitter', content_type: 'test_result' });
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };

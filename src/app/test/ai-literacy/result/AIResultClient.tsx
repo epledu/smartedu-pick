@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useState } from 'react';
 import Link from 'next/link';
+import { event as gaEvent } from '@/lib/analytics';
 import { aiLevels, DIFFICULTY_COLORS } from '@/data/tests/ai-literacy';
 import type { AILevel, AILevelInfo } from '@/data/tests/ai-literacy';
 import { calculateExpProgress } from '@/lib/test-utils';
@@ -72,6 +73,7 @@ function ShareButtons({ levelInfo }: { levelInfo: AILevelInfo }) {
   const shareText = `나는 ${levelInfo.emoji} ${levelInfo.title}! AI 활용 능력 진단 해보기 →`;
 
   const handleCopyUrl = async () => {
+    gaEvent('share', { method: 'url_copy', content_type: 'test_result' });
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -89,11 +91,13 @@ function ShareButtons({ levelInfo }: { levelInfo: AILevelInfo }) {
   };
 
   const handleKakaoShare = () => {
+    gaEvent('share', { method: 'kakao', content_type: 'test_result' });
     const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
     window.open(kakaoUrl, '_blank', 'width=600,height=400');
   };
 
   const handleTwitterShare = () => {
+    gaEvent('share', { method: 'twitter', content_type: 'test_result' });
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };

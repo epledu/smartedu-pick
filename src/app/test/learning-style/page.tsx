@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { questions } from '@/data/tests/learning-style';
 import type { LearningType } from '@/data/tests/learning-style';
 import { calculateResult } from '@/lib/test-utils';
+import { event as gaEvent } from '@/lib/analytics';
 import TestProgress from '@/components/test/TestProgress';
 import QuestionCard from '@/components/test/QuestionCard';
 
@@ -19,6 +20,7 @@ export default function LearningStyleTestPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleStart = () => {
+    gaEvent('test_start', { test_name: 'learning-style' });
     setPhase('questions');
   };
 
@@ -39,6 +41,7 @@ export default function LearningStyleTestPage() {
         // Last question → calculate result
         setPhase('calculating');
         const result = calculateResult(newAnswers);
+        gaEvent('test_complete', { test_name: 'learning-style', result_type: result });
         // Encode all answers as comma-separated string
         const answersParam = newAnswers.join(',');
         setTimeout(() => {

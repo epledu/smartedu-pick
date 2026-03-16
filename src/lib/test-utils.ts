@@ -3,6 +3,7 @@ import type { AILevel } from '@/data/tests/ai-literacy';
 import { LEVEL_RANGES, LEVEL_SCORE_RANGES } from '@/data/tests/ai-literacy';
 import type { ChildType } from '@/data/tests/child-type';
 import type { StudyMethodType } from '@/data/tests/ai-study-method';
+import type { CareerAIType } from '@/data/tests/career-ai';
 
 export function calculateResult(answers: LearningType[]): LearningType {
   const scores: Record<LearningType, number> = {
@@ -129,6 +130,26 @@ export function calculateStudyMethod(answers: StudyMethodType[]): StudyMethodRes
   return {
     primary: sorted[0][0] as StudyMethodType,
     secondary: sorted[1][0] as StudyMethodType,
+    scores,
+  };
+}
+
+// AI 시대 직업 적성 유틸리티
+export interface CareerAIResult {
+  primary: CareerAIType;
+  secondary: CareerAIType;
+  scores: Record<CareerAIType, number>;
+}
+
+export function calculateCareerAI(answers: CareerAIType[]): CareerAIResult {
+  const scores: Record<CareerAIType, number> = {
+    creator: 0, strategist: 0, connector: 0, analyst: 0, educator: 0, builder: 0,
+  };
+  answers.forEach((type) => { scores[type]++; });
+  const sorted = Object.entries(scores).sort(([, a], [, b]) => b - a);
+  return {
+    primary: sorted[0][0] as CareerAIType,
+    secondary: sorted[1][0] as CareerAIType,
     scores,
   };
 }

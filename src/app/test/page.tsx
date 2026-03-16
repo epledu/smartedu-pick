@@ -47,6 +47,15 @@ const TESTS = [
     meta: '약 2분 | 10문항',
     href: '/test/ai-study-method',
     active: true,
+    badge: '',
+  },
+  {
+    emoji: '💼',
+    title: 'AI 시대 직업 적성 테스트',
+    desc: 'AI 시대, 나에게 맞는 커리어 방향은? AI 대체 안전도 확인',
+    meta: '약 3분 | 12문항',
+    href: '/test/career-ai',
+    active: true,
     badge: 'NEW',
   },
 ];

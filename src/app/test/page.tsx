@@ -38,6 +38,15 @@ const TESTS = [
     meta: '약 3분 | 참여자 856명',
     href: '/test/child-type',
     active: true,
+    badge: '',
+  },
+  {
+    emoji: '🧠',
+    title: '나에게 맞는 AI 공부법 추천',
+    desc: 'AI 도구 + 학습법 조합으로 나만의 학습 루틴 찾기',
+    meta: '약 2분 | 10문항',
+    href: '/test/ai-study-method',
+    active: true,
     badge: 'NEW',
   },
 ];

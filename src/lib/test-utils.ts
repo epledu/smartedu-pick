@@ -2,6 +2,7 @@ import type { LearningType } from '@/data/tests/learning-style';
 import type { AILevel } from '@/data/tests/ai-literacy';
 import { LEVEL_RANGES, LEVEL_SCORE_RANGES } from '@/data/tests/ai-literacy';
 import type { ChildType } from '@/data/tests/child-type';
+import type { StudyMethodType } from '@/data/tests/ai-study-method';
 
 export function calculateResult(answers: LearningType[]): LearningType {
   const scores: Record<LearningType, number> = {
@@ -109,4 +110,25 @@ export function getChildScorePercentages(
     result[key as ChildType] = Math.round((val / total) * 100);
   }
   return result as Record<ChildType, number>;
+}
+
+// AI 공부법 추천 유틸리티
+export interface StudyMethodResult {
+  primary: StudyMethodType;
+  secondary: StudyMethodType;
+  scores: Record<StudyMethodType, number>;
+}
+
+export function calculateStudyMethod(answers: StudyMethodType[]): StudyMethodResult {
+  const scores: Record<StudyMethodType, number> = {
+    'prompt-writer': 0, 'visual-noter': 0, 'audio-learner': 0, 'project-doer': 0,
+    'quiz-challenger': 0, 'research-diver': 0, 'summary-master': 0, 'creative-maker': 0,
+  };
+  answers.forEach((type) => { scores[type]++; });
+  const sorted = Object.entries(scores).sort(([, a], [, b]) => b - a);
+  return {
+    primary: sorted[0][0] as StudyMethodType,
+    secondary: sorted[1][0] as StudyMethodType,
+    scores,
+  };
 }

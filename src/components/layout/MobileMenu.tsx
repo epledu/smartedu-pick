@@ -24,17 +24,22 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 md:hidden">
+    <div className="fixed inset-0 z-[9999] md:hidden" role="dialog" aria-modal="true">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+        aria-label="메뉴 닫기"
+      />
 
-      {/* Panel */}
-      <div className="absolute right-0 top-0 h-full w-72 bg-surface shadow-xl">
+      {/* Panel — 명시적 bg-white로 본문 완전 차단 */}
+      <div className="absolute right-0 top-0 h-full w-72 animate-slide-in-right bg-white shadow-2xl">
+        {/* Header */}
         <div className="flex h-16 items-center justify-between border-b border-border px-4">
           <span className="text-lg font-bold text-primary">🎯 {SITE.name}</span>
           <button
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary hover:bg-primary/5"
+            className="flex h-12 w-12 items-center justify-center rounded-lg text-text-secondary hover:bg-primary/5"
             aria-label="메뉴 닫기"
           >
             <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -43,13 +48,14 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
           </button>
         </div>
 
-        <nav className="flex flex-col p-4">
+        {/* Nav items — 터치 타겟 48px+ 보장 */}
+        <nav className="flex flex-col overflow-y-auto p-4" style={{ maxHeight: 'calc(100vh - 64px)' }}>
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="rounded-lg px-4 py-3 text-base font-medium text-text-primary transition-colors hover:bg-primary/5 hover:text-primary"
+              className="flex min-h-[48px] items-center rounded-lg px-4 py-3 text-base font-medium text-text-primary transition-colors hover:bg-primary/5 hover:text-primary active:bg-primary/10"
             >
               {item.label}
             </Link>
@@ -60,7 +66,7 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-primary/5 hover:text-primary"
+              className="flex min-h-[48px] items-center rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-primary/5 hover:text-primary active:bg-primary/10"
             >
               {item.label}
             </Link>

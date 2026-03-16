@@ -33,3 +33,16 @@ html {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* Mobile menu slide-in animation */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.25s ease-out;
+}

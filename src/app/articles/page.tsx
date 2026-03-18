@@ -26,9 +26,14 @@ export default function ArticlesPage() {
           <h1 className="mb-3 text-3xl font-extrabold text-text-primary md:text-4xl">
             📰 아티클
           </h1>
-          <p className="text-base text-text-secondary md:text-lg">
+          <p className="mb-2 text-base text-text-secondary md:text-lg">
             AI 교육 트렌드와 활용법, 학습 가이드를 만나보세요.
           </p>
+          <div className="flex items-center justify-center gap-3 text-sm text-text-secondary">
+            <span>총 {articles.length}개의 아티클</span>
+            <span className="h-4 w-px bg-border" />
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">최신순</span>
+          </div>
         </div>
 
         {/* Article List with Category Filter */}

@@ -9,6 +9,8 @@ import RelatedArticles from '@/components/articles/RelatedArticles';
 import ArticleShareBar from '@/components/articles/ArticleShareBar';
 import ArticleViewTracker from '@/components/articles/ArticleViewTracker';
 import NewsletterCTA from '@/components/articles/NewsletterCTA';
+import ReadingProgress from '@/components/articles/ReadingProgress';
+import Link from 'next/link';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -111,6 +113,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       )}
 
       <ArticleViewTracker slug={slug} />
+      <ReadingProgress />
       <div className="py-12 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           {/* Article Header */}
@@ -143,9 +146,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
             {/* Article Content */}
             <article className="mx-auto min-w-0 max-w-3xl flex-1">
               {/* Ad Slot Placeholder 1 */}
-              <div className="mb-8 flex h-24 items-center justify-center rounded-xl border-2 border-dashed border-border bg-surface/50">
-                <span className="text-xs text-text-secondary">광고 영역</span>
-              </div>
+              {/* AdSense 승인 후 자동 표시 */}
 
               {/* MDX Content */}
               <div className="prose prose-lg max-w-none prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:text-text-primary prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-xl prose-h2:md:text-2xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-lg prose-p:leading-relaxed prose-p:text-text-secondary prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-text-primary prose-ul:text-text-secondary prose-ol:text-text-secondary prose-li:leading-relaxed prose-blockquote:border-primary prose-blockquote:text-text-secondary">
@@ -153,9 +154,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
               </div>
 
               {/* Ad Slot Placeholder 2 */}
-              <div className="my-8 flex h-24 items-center justify-center rounded-xl border-2 border-dashed border-border bg-surface/50">
-                <span className="text-xs text-text-secondary">광고 영역</span>
-              </div>
+              {/* AdSense 승인 후 자동 표시 */}
 
               {/* FAQ Section */}
               {faqs.length > 0 && (
@@ -184,12 +183,13 @@ export default async function ArticleDetailPage({ params }: PageProps) {
               {/* Tags */}
               <div className="my-8 flex flex-wrap gap-2">
                 {meta.tags.map((tag) => (
-                  <span
+                  <Link
                     key={tag}
-                    className="rounded-full bg-bg px-3 py-1 text-xs font-medium text-text-secondary"
+                    href={`/articles?tag=${encodeURIComponent(tag)}`}
+                    className="rounded-full bg-bg px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:bg-primary/10 hover:text-primary"
                   >
                     #{tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
 
@@ -199,13 +199,17 @@ export default async function ArticleDetailPage({ params }: PageProps) {
               </div>
 
               {/* Ad Slot Placeholder 3 */}
-              <div className="my-8 flex h-24 items-center justify-center rounded-xl border-2 border-dashed border-border bg-surface/50">
-                <span className="text-xs text-text-secondary">광고 영역</span>
-              </div>
+              {/* AdSense 승인 후 자동 표시 */}
 
-              {/* Related Tests */}
+              {/* Related Test CTA Banner */}
               {meta.relatedTests.length > 0 && (
-                <div className="my-10">
+                <div className="my-10 overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/10 p-6 md:p-8">
+                  <h2 className="mb-2 text-lg font-bold text-text-primary md:text-xl">
+                    🎯 이 아티클을 읽은 분들이 가장 많이 해본 테스트
+                  </h2>
+                  <p className="mb-5 text-sm text-text-secondary">
+                    읽은 내용을 바탕으로 나에게 맞는 유형을 확인해보세요
+                  </p>
                   <RelatedTests testIds={meta.relatedTests} variant="bottom" />
                 </div>
               )}

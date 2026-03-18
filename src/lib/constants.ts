@@ -6,7 +6,7 @@ export const SITE = {
   slogan: 'AI가 골라주는 나에게 딱 맞는 교육',
   description:
     '현직 에듀테크 전문가가 운영하는 AI 교육 정보 플랫폼. 학습유형 테스트, AI 도구 추천, 교육 AI 가이드를 제공합니다.',
-  email: 'contact@smartedu-pick.com',
+  email: 'edu7epl@gmail.com',
 
   links: {
     blogA: 'https://blog.naver.com/gkseogur77',

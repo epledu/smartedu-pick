@@ -8,7 +8,7 @@ import type { LearningType } from '@/data/tests/learning-style';
 import { getScorePercentages } from '@/lib/test-utils';
 import ResultCard from '@/components/test/ResultCard';
 import ResultDetail from '@/components/test/ResultDetail';
-import ShareButtons from '@/components/test/ShareButtons';
+import ShareSection from '@/components/test/ShareSection';
 import ResultImageGenerator from '@/components/test/ResultImageGenerator';
 import OtherTests from '@/components/test/OtherTests';
 import AdSlot from '@/components/common/AdSlot';
@@ -57,6 +57,18 @@ function ResultContent() {
         {/* Result Card */}
         <ResultCard typeInfo={typeInfo} />
 
+        {/* Share — 결과 직후 배치 */}
+        <div className="mt-6 space-y-3">
+          <ShareSection
+            heading="친구에게도 알려주세요! 🎉"
+            subtext="나의 학습유형을 공유하고 친구의 유형도 확인해보세요"
+            kakaoTitle={`나는 ${typeInfo.emoji}${typeInfo.label}!`}
+            shareUrl="https://smartedu-pick.com/test/learning-style"
+            twitterText={`나는 ${typeInfo.emoji}${typeInfo.label}! 나의 학습유형 테스트 해보기 →`}
+          />
+          <ResultImageGenerator typeInfo={typeInfo} />
+        </div>
+
         {/* Score Chart */}
         <div className="mt-8 rounded-2xl border border-border bg-surface p-6 md:p-8">
           <h2 className="mb-5 text-lg font-bold text-text-primary">📊 유형별 점수 분포</h2>
@@ -98,12 +110,6 @@ function ResultContent() {
 
         {/* Ad Slot 2 */}
         <AdSlot className="my-8" />
-
-        {/* Share */}
-        <div className="mt-8 space-y-4">
-          <ShareButtons typeInfo={typeInfo} />
-          <ResultImageGenerator typeInfo={typeInfo} />
-        </div>
 
         {/* Other Tests */}
         <div className="mt-10">

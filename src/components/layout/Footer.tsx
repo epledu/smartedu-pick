@@ -86,8 +86,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6 text-center text-xs text-text-secondary">
-          © {new Date().getFullYear()} {SITE.name}. All rights reserved.
+        {/* 사람 냄새 나는 한 줄 */}
+        <div className="mt-10 border-t border-border pt-6 text-center">
+          <p className="mb-3 text-sm text-text-secondary">
+            에듀테크 현직자가 퇴근 후 만드는 사이트입니다 ☕
+          </p>
+          <p className="text-xs text-text-secondary/60">
+            © {new Date().getFullYear()} {SITE.name}. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

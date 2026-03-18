@@ -143,6 +143,53 @@ export const aiTools: AITool[] = [
     expertTip: 'Magic Design 기능으로 텍스트만 입력하면 프로 수준의 카드뉴스가 완성됩니다.',
   },
 
+  {
+    id: 'gemini',
+    name: 'Gemini',
+    emoji: '✨',
+    description: '구글의 AI 어시스턴트. 검색과 연동되어 최신 정보 기반 답변에 강점',
+    target: '직장인용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://gemini.google.com',
+    expertTip: '구글 워크스페이스(Gmail, Docs)와 연동하면 업무 효율이 크게 올라갑니다.',
+  },
+
+  {
+    id: 'suno',
+    name: 'Suno AI',
+    emoji: '🎵',
+    description: '텍스트만 입력하면 노래를 만들어주는 AI 음악 생성 도구',
+    target: '학생용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://suno.com',
+    expertTip: '영어 단어를 노래 가사로 만들면 재미있게 외울 수 있어요. 학생들 반응이 폭발적!',
+  },
+  {
+    id: 'speak',
+    name: '스픽 (Speak)',
+    emoji: '🗣️',
+    description: 'AI 튜터와 영어 회화 연습. 발음 교정과 실시간 피드백 제공',
+    target: '학생용',
+    pricing: '무료+유료',
+    rating: 5,
+    url: 'https://www.speak.com',
+    expertTip: '매일 10분씩 스픽으로 말하기 연습하면 3개월 후 체감 변화가 큽니다.',
+  },
+
+  {
+    id: 'miricanvas',
+    name: '미리캔버스',
+    emoji: '🖼️',
+    description: '한국형 디자인 도구. 학습지, 상장, 안내문 등 교육 템플릿이 풍부',
+    target: '교사용',
+    pricing: '무료',
+    rating: 4,
+    url: 'https://www.miricanvas.com',
+    expertTip: '학교 공문서, 가정통신문 템플릿이 많아서 한국 교사에게는 Canva보다 편할 수 있어요.',
+  },
+
   // 학부모용 (2개)
   {
     id: 'khan-kids',

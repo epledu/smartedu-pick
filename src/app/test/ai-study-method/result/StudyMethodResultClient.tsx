@@ -4,11 +4,13 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { incrementTestCount } from '@/lib/test-counter';
+import { saveProfileResult } from '@/lib/profile-generator';
 import { studyMethods } from '@/data/tests/ai-study-method';
 import type { StudyMethodType } from '@/data/tests/ai-study-method';
 import StudyRoutineCard from '@/components/test/StudyRoutineCard';
 import ShareSection from '@/components/test/ShareSection';
 import OtherTests from '@/components/test/OtherTests';
+import ProfileCTA from '@/components/test/ProfileCTA';
 import AdSlot from '@/components/common/AdSlot';
 
 const ALL_TYPES: StudyMethodType[] = [
@@ -90,16 +92,23 @@ function StudyMethodResultContent() {
   const secondaryParam = (searchParams.get('secondary') || 'visual-noter') as StudyMethodType;
   const [participantCount, setParticipantCount] = useState(0);
 
-  useEffect(() => {
-    const count = incrementTestCount('ai-study-method');
-    setParticipantCount(count);
-  }, []);
-
   const primary = studyMethods[primaryParam] ? primaryParam : 'prompt-writer';
   const secondary = studyMethods[secondaryParam] ? secondaryParam : (primary === 'prompt-writer' ? 'visual-noter' : 'prompt-writer');
 
   const primaryInfo = studyMethods[primary];
   const secondaryInfo = studyMethods[secondary];
+
+  useEffect(() => {
+    const count = incrementTestCount('ai-study-method');
+    setParticipantCount(count);
+    saveProfileResult('ai-study-method', {
+      type: primary,
+      label: primaryInfo.label,
+      emoji: primaryInfo.emoji,
+      completedAt: new Date().toISOString().slice(0, 10),
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="py-10 md:py-16">
@@ -271,6 +280,9 @@ function StudyMethodResultContent() {
 
         {/* Ad Slot 2 */}
         <AdSlot className="my-8" />
+
+        {/* Profile CTA */}
+        <div className="mt-8"><ProfileCTA /></div>
 
         {/* Other Tests */}
         <div className="mt-10">

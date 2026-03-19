@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import TestCountBadge from '@/components/test/TestCountBadge';
+import ProfileCTA from '@/components/test/ProfileCTA';
 
 export const metadata: Metadata = {
   title: '교육 테스트',
@@ -78,6 +79,11 @@ export default function TestPage() {
           <p className="text-base text-text-secondary md:text-lg">
             스마트에듀픽의 테스트로 나만의 학습 스타일을 발견하세요.
           </p>
+        </div>
+
+        {/* Profile Banner */}
+        <div className="mb-8">
+          <ProfileCTA />
         </div>
 
         {/* Test Cards */}

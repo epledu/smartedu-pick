@@ -3,7 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { incrementTestCount, formatCount } from '@/lib/test-counter';
+import { incrementTestCount } from '@/lib/test-counter';
+import { saveProfileResult } from '@/lib/profile-generator';
 import { learningTypes } from '@/data/tests/learning-style';
 import type { LearningType } from '@/data/tests/learning-style';
 import { getScorePercentages } from '@/lib/test-utils';
@@ -12,6 +13,7 @@ import ResultDetail from '@/components/test/ResultDetail';
 import ShareSection from '@/components/test/ShareSection';
 import ResultImageGenerator from '@/components/test/ResultImageGenerator';
 import OtherTests from '@/components/test/OtherTests';
+import ProfileCTA from '@/components/test/ProfileCTA';
 import AdSlot from '@/components/common/AdSlot';
 
 const TYPE_ORDER: LearningType[] = ['visual', 'auditory', 'kinesthetic', 'analytical'];
@@ -25,7 +27,14 @@ function ResultContent() {
   useEffect(() => {
     const count = incrementTestCount('learning-style');
     setParticipantCount(count);
-  }, []);
+    const info = learningTypes[type] || learningTypes.visual;
+    saveProfileResult('learning-style', {
+      type,
+      label: info.label,
+      emoji: info.emoji,
+      completedAt: new Date().toISOString().slice(0, 10),
+    });
+  }, [type]);
 
   const typeInfo = learningTypes[type] || learningTypes.visual;
 
@@ -123,6 +132,11 @@ function ResultContent() {
 
         {/* Ad Slot 2 */}
         <AdSlot className="my-8" />
+
+        {/* Profile CTA */}
+        <div className="mt-8">
+          <ProfileCTA />
+        </div>
 
         {/* Other Tests */}
         <div className="mt-10">

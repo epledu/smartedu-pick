@@ -4,11 +4,13 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { incrementTestCount } from '@/lib/test-counter';
+import { saveProfileResult } from '@/lib/profile-generator';
 import { careerAITypes } from '@/data/tests/career-ai';
 import type { CareerAIType } from '@/data/tests/career-ai';
 import CareerAIScore from '@/components/test/CareerAIScore';
 import ShareSection from '@/components/test/ShareSection';
 import OtherTests from '@/components/test/OtherTests';
+import ProfileCTA from '@/components/test/ProfileCTA';
 import AdSlot from '@/components/common/AdSlot';
 
 const ALL_TYPES: CareerAIType[] = ['creator', 'strategist', 'connector', 'analyst', 'educator', 'builder'];
@@ -95,16 +97,23 @@ function CareerAIResultContent() {
   const secondaryParam = (searchParams.get('secondary') || 'strategist') as CareerAIType;
   const [participantCount, setParticipantCount] = useState(0);
 
-  useEffect(() => {
-    const count = incrementTestCount('career-ai');
-    setParticipantCount(count);
-  }, []);
-
   const primary = careerAITypes[primaryParam] ? primaryParam : 'creator';
   const secondary = careerAITypes[secondaryParam] ? secondaryParam : (primary === 'creator' ? 'strategist' : 'creator');
 
   const primaryInfo = careerAITypes[primary];
   const secondaryInfo = careerAITypes[secondary];
+
+  useEffect(() => {
+    const count = incrementTestCount('career-ai');
+    setParticipantCount(count);
+    saveProfileResult('career-ai', {
+      type: primary,
+      label: primaryInfo.label,
+      emoji: primaryInfo.emoji,
+      completedAt: new Date().toISOString().slice(0, 10),
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="py-10 md:py-16">
@@ -265,6 +274,9 @@ function CareerAIResultContent() {
 
         {/* Ad 2 */}
         <AdSlot className="my-8" />
+
+        {/* Profile CTA */}
+        <div className="mt-8"><ProfileCTA /></div>
 
         {/* Other Tests */}
         <div className="mt-10">

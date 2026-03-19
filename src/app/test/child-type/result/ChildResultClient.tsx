@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { incrementTestCount } from '@/lib/test-counter';
+import { saveProfileResult } from '@/lib/profile-generator';
 import { childTypes, combinations, AGE_RANGE_COLORS } from '@/data/tests/child-type';
 import type { ChildType } from '@/data/tests/child-type';
 import { getChildScorePercentages } from '@/lib/test-utils';
@@ -11,6 +12,7 @@ import ChildResultCard from '@/components/test/ChildResultCard';
 import ParentActionGuide from '@/components/test/ParentActionGuide';
 import ShareSection from '@/components/test/ShareSection';
 import OtherTests from '@/components/test/OtherTests';
+import ProfileCTA from '@/components/test/ProfileCTA';
 import AdSlot from '@/components/common/AdSlot';
 
 const TYPE_ORDER: ChildType[] = ['explorer', 'creative', 'social', 'logical', 'steady', 'perfectionist'];
@@ -107,6 +109,14 @@ function ChildResultContent() {
   useEffect(() => {
     const count = incrementTestCount('child-type');
     setParticipantCount(count);
+    const info = childTypes[primary];
+    saveProfileResult('child-type', {
+      type: primary,
+      label: info.label,
+      emoji: info.emoji,
+      completedAt: new Date().toISOString().slice(0, 10),
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const primary = childTypes[primaryParam] ? primaryParam : 'explorer';
@@ -341,6 +351,9 @@ function ChildResultContent() {
 
         {/* Ad Slot 2 */}
         <AdSlot className="my-8" />
+
+        {/* Profile CTA */}
+        <div className="mt-8"><ProfileCTA /></div>
 
         {/* Other Tests */}
         <div className="mt-10">

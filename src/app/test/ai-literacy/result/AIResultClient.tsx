@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { incrementTestCount } from '@/lib/test-counter';
+import { saveProfileResult } from '@/lib/profile-generator';
 import { aiLevels, DIFFICULTY_COLORS } from '@/data/tests/ai-literacy';
 import type { AILevel, AILevelInfo } from '@/data/tests/ai-literacy';
 import { calculateExpProgress } from '@/lib/test-utils';
@@ -12,6 +13,7 @@ import LevelProgressBar from '@/components/test/LevelProgressBar';
 import LevelUpPath from '@/components/test/LevelUpPath';
 import ShareSection from '@/components/test/ShareSection';
 import OtherTests from '@/components/test/OtherTests';
+import ProfileCTA from '@/components/test/ProfileCTA';
 import AdSlot from '@/components/common/AdSlot';
 
 const ALL_LEVELS: AILevel[] = [1, 2, 3, 4, 5];
@@ -178,6 +180,14 @@ function AIResultContent() {
   useEffect(() => {
     const count = incrementTestCount('ai-literacy');
     setParticipantCount(count);
+    const info = aiLevels[level];
+    saveProfileResult('ai-literacy', {
+      type: String(level),
+      label: `Lv.${level} ${info.label}`,
+      emoji: info.emoji,
+      completedAt: new Date().toISOString().slice(0, 10),
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const level = (levelParam >= 1 && levelParam <= 5 ? levelParam : 3) as AILevel;
@@ -331,6 +341,9 @@ function AIResultContent() {
 
         {/* Level Map */}
         <LevelMap currentLevel={level} />
+
+        {/* Profile CTA */}
+        <div className="mt-8"><ProfileCTA /></div>
 
         {/* Other Tests */}
         <div className="mt-10">

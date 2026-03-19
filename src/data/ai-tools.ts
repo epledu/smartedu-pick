@@ -1,5 +1,6 @@
-export type ToolTarget = '교사용' | '학생용' | '직장인용' | '학부모용';
+export type ToolTarget = '교사용' | '학생용' | '직장인용' | '학부모용' | '창작용' | '개발자용';
 export type ToolPricing = '무료' | '무료+유료' | '유료';
+export type ToolBadge = '🔥 인기' | '🏆 전문가용' | '🔰 입문자 추천' | '🆓 완전 무료' | '💼 업무 필수';
 
 export interface AITool {
   id: string;
@@ -11,6 +12,7 @@ export interface AITool {
   rating: 1 | 2 | 3 | 4 | 5;
   url: string;
   expertTip: string;
+  badge?: ToolBadge;
 }
 
 export const TARGET_EMOJI: Record<ToolTarget, string> = {
@@ -18,6 +20,8 @@ export const TARGET_EMOJI: Record<ToolTarget, string> = {
   '학생용': '📚',
   '직장인용': '💼',
   '학부모용': '👶',
+  '창작용': '🎨',
+  '개발자용': '💻',
 };
 
 export const PRICING_STYLE: Record<ToolPricing, { bg: string; text: string }> = {
@@ -26,8 +30,16 @@ export const PRICING_STYLE: Record<ToolPricing, { bg: string; text: string }> = 
   '유료': { bg: '#FEF3C7', text: '#92400E' },
 };
 
+export const BADGE_STYLE: Record<ToolBadge, { bg: string; color: string }> = {
+  '🔥 인기': { bg: '#FEF2F2', color: '#DC2626' },
+  '🏆 전문가용': { bg: '#F5F3FF', color: '#7C3AED' },
+  '🔰 입문자 추천': { bg: '#ECFDF5', color: '#059669' },
+  '🆓 완전 무료': { bg: '#EFF6FF', color: '#2563EB' },
+  '💼 업무 필수': { bg: '#FFFBEB', color: '#D97706' },
+};
+
 export const aiTools: AITool[] = [
-  // 교사용 (4개)
+  // ── 교사용 ──
   {
     id: 'chatgpt',
     name: 'ChatGPT',
@@ -38,6 +50,7 @@ export const aiTools: AITool[] = [
     rating: 5,
     url: 'https://chat.openai.com',
     expertTip: '프롬프트에 "한국 중학교 2학년 수학" 같이 구체적 맥락을 넣으면 퀄리티가 확 올라갑니다.',
+    badge: '🔥 인기',
   },
   {
     id: 'claude',
@@ -49,6 +62,7 @@ export const aiTools: AITool[] = [
     rating: 5,
     url: 'https://claude.ai',
     expertTip: '교육과정 PDF를 통째로 업로드하면 성취기준별 수업 아이디어를 바로 받을 수 있어요.',
+    badge: '🏆 전문가용',
   },
   {
     id: 'gamma',
@@ -60,6 +74,7 @@ export const aiTools: AITool[] = [
     rating: 4,
     url: 'https://gamma.app',
     expertTip: '수업 주제만 입력하면 10분 만에 깔끔한 발표자료가 완성됩니다.',
+    badge: '🔰 입문자 추천',
   },
   {
     id: 'notebooklm',
@@ -71,9 +86,34 @@ export const aiTools: AITool[] = [
     rating: 4,
     url: 'https://notebooklm.google.com',
     expertTip: '교과서 PDF + 수업자료를 함께 올리면 학생용 학습 가이드를 자동 생성할 수 있어요.',
+    badge: '🆓 완전 무료',
+  },
+  {
+    id: 'miricanvas',
+    name: '미리캔버스',
+    emoji: '🖼️',
+    description: '한국형 디자인 도구. 학습지, 상장, 안내문 등 교육 템플릿이 풍부',
+    target: '교사용',
+    pricing: '무료',
+    rating: 4,
+    url: 'https://www.miricanvas.com',
+    expertTip: '학교 공문서, 가정통신문 템플릿이 많아서 한국 교사에게는 Canva보다 편할 수 있어요.',
+    badge: '🆓 완전 무료',
+  },
+  {
+    id: 'diffit',
+    name: 'Diffit',
+    emoji: '📝',
+    description: '학생 수준에 맞춰 학습 자료를 AI가 자동 재구성. 수업 차별화에 최적',
+    target: '교사용',
+    pricing: '무료',
+    rating: 4,
+    url: 'https://diffit.me',
+    expertTip: '같은 주제를 상/중/하 수준별로 자동 변환해주니, 수준별 수업 자료 만들 때 시간이 크게 줄어요.',
+    badge: '🆓 완전 무료',
   },
 
-  // 학생용 (3개)
+  // ── 학생용 ──
   {
     id: 'khan-academy',
     name: 'Khan Academy',
@@ -84,6 +124,7 @@ export const aiTools: AITool[] = [
     rating: 5,
     url: 'https://www.khanacademy.org',
     expertTip: '수학, 과학 기초가 부족할 때 가장 효과적입니다. 자기 페이스로 반복 학습이 핵심이에요.',
+    badge: '🆓 완전 무료',
   },
   {
     id: 'quizlet',
@@ -95,6 +136,7 @@ export const aiTools: AITool[] = [
     rating: 4,
     url: 'https://quizlet.com',
     expertTip: '시험 2주 전부터 매일 10분씩 Quizlet 반복하면 암기 과목 점수가 확 오릅니다.',
+    badge: '🔰 입문자 추천',
   },
   {
     id: 'perplexity',
@@ -106,65 +148,7 @@ export const aiTools: AITool[] = [
     rating: 4,
     url: 'https://www.perplexity.ai',
     expertTip: '구글 검색 대신 Perplexity로 리서치하면 출처까지 정리된 답변을 바로 받을 수 있어요.',
-  },
-
-  // 직장인용 (3개)
-  {
-    id: 'notion-ai',
-    name: 'Notion AI',
-    emoji: '📝',
-    description: '문서 작성, 회의록 요약, 업무 정리를 AI가 도와주는 올인원 워크스페이스',
-    target: '직장인용',
-    pricing: '유료',
-    rating: 5,
-    url: 'https://www.notion.so/product/ai',
-    expertTip: '회의록을 Notion에 붙여넣고 "액션 아이템 추출"하면 업무 효율이 2배가 됩니다.',
-  },
-  {
-    id: 'wrtn',
-    name: '뤼튼 (Wrtn)',
-    emoji: '✍️',
-    description: '한국어에 특화된 AI 글쓰기 도구 — 보고서, 이메일, SNS 글 작성',
-    target: '직장인용',
-    pricing: '무료',
-    rating: 4,
-    url: 'https://wrtn.ai',
-    expertTip: '보고서 초안을 뤼튼으로 잡고, 본인의 데이터와 인사이트를 추가하는 게 가장 효율적이에요.',
-  },
-  {
-    id: 'canva-ai',
-    name: 'Canva AI',
-    emoji: '🎨',
-    description: 'AI로 디자인과 발표자료를 자동 생성하는 올인원 디자인 툴',
-    target: '직장인용',
-    pricing: '무료+유료',
-    rating: 4,
-    url: 'https://www.canva.com',
-    expertTip: 'Magic Design 기능으로 텍스트만 입력하면 프로 수준의 카드뉴스가 완성됩니다.',
-  },
-
-  {
-    id: 'gemini',
-    name: 'Gemini',
-    emoji: '✨',
-    description: '구글의 AI 어시스턴트. 검색과 연동되어 최신 정보 기반 답변에 강점',
-    target: '직장인용',
-    pricing: '무료+유료',
-    rating: 4,
-    url: 'https://gemini.google.com',
-    expertTip: '구글 워크스페이스(Gmail, Docs)와 연동하면 업무 효율이 크게 올라갑니다.',
-  },
-
-  {
-    id: 'suno',
-    name: 'Suno AI',
-    emoji: '🎵',
-    description: '텍스트만 입력하면 노래를 만들어주는 AI 음악 생성 도구',
-    target: '학생용',
-    pricing: '무료+유료',
-    rating: 4,
-    url: 'https://suno.com',
-    expertTip: '영어 단어를 노래 가사로 만들면 재미있게 외울 수 있어요. 학생들 반응이 폭발적!',
+    badge: '🔥 인기',
   },
   {
     id: 'speak',
@@ -176,21 +160,96 @@ export const aiTools: AITool[] = [
     rating: 5,
     url: 'https://www.speak.com',
     expertTip: '매일 10분씩 스픽으로 말하기 연습하면 3개월 후 체감 변화가 큽니다.',
+    badge: '🔥 인기',
+  },
+  {
+    id: 'mathway',
+    name: 'Mathway',
+    emoji: '➗',
+    description: '수학 문제를 사진으로 찍으면 AI가 풀이 과정까지 알려주는 수학 튜터',
+    target: '학생용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://www.mathway.com',
+    expertTip: '답만 보지 말고 풀이 과정을 따라가며 이해하는 게 핵심이에요. 오답 노트와 함께 쓰면 효과 2배.',
+    badge: '🔰 입문자 추천',
   },
 
+  // ── 직장인용 ──
   {
-    id: 'miricanvas',
-    name: '미리캔버스',
-    emoji: '🖼️',
-    description: '한국형 디자인 도구. 학습지, 상장, 안내문 등 교육 템플릿이 풍부',
-    target: '교사용',
+    id: 'notion-ai',
+    name: 'Notion AI',
+    emoji: '📝',
+    description: '문서 작성, 회의록 요약, 업무 정리를 AI가 도와주는 올인원 워크스페이스',
+    target: '직장인용',
+    pricing: '유료',
+    rating: 5,
+    url: 'https://www.notion.so/product/ai',
+    expertTip: '회의록을 Notion에 붙여넣고 "액션 아이템 추출"하면 업무 효율이 2배가 됩니다.',
+    badge: '💼 업무 필수',
+  },
+  {
+    id: 'wrtn',
+    name: '뤼튼 (Wrtn)',
+    emoji: '✍️',
+    description: '한국어에 특화된 AI 글쓰기 도구 — 보고서, 이메일, SNS 글 작성',
+    target: '직장인용',
     pricing: '무료',
     rating: 4,
-    url: 'https://www.miricanvas.com',
-    expertTip: '학교 공문서, 가정통신문 템플릿이 많아서 한국 교사에게는 Canva보다 편할 수 있어요.',
+    url: 'https://wrtn.ai',
+    expertTip: '보고서 초안을 뤼튼으로 잡고, 본인의 데이터와 인사이트를 추가하는 게 가장 효율적이에요.',
+    badge: '🆓 완전 무료',
+  },
+  {
+    id: 'canva-ai',
+    name: 'Canva AI',
+    emoji: '🎨',
+    description: 'AI로 디자인과 발표자료를 자동 생성하는 올인원 디자인 툴',
+    target: '직장인용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://www.canva.com',
+    expertTip: 'Magic Design 기능으로 텍스트만 입력하면 프로 수준의 카드뉴스가 완성됩니다.',
+    badge: '🔥 인기',
+  },
+  {
+    id: 'gemini',
+    name: 'Gemini',
+    emoji: '✨',
+    description: '구글의 AI 어시스턴트. 검색과 연동되어 최신 정보 기반 답변에 강점',
+    target: '직장인용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://gemini.google.com',
+    expertTip: '구글 워크스페이스(Gmail, Docs)와 연동하면 업무 효율이 크게 올라갑니다.',
+    badge: '🔥 인기',
+  },
+  {
+    id: 'otter',
+    name: 'Otter.ai',
+    emoji: '🎙️',
+    description: '회의 녹음을 AI가 실시간 텍스트로 변환하고 핵심 요약까지 자동 생성',
+    target: '직장인용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://otter.ai',
+    expertTip: '영어 회의가 많은 분에게 추천. 한국어는 클로바노트가 더 정확하지만, 영어는 Otter가 최고예요.',
+    badge: '💼 업무 필수',
+  },
+  {
+    id: 'zapier',
+    name: 'Zapier AI',
+    emoji: '⚡',
+    description: '5,000개 이상의 앱을 연결하는 AI 자동화 플랫폼. 코딩 없이 업무 자동화 구축',
+    target: '직장인용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://zapier.com',
+    expertTip: '"이메일 오면 슬랙에 알림 보내기" 같은 반복 작업을 자동화하면 하루 1시간은 아낍니다.',
+    badge: '🏆 전문가용',
   },
 
-  // 학부모용 (2개)
+  // ── 학부모용 ──
   {
     id: 'khan-kids',
     name: 'Khan Academy Kids',
@@ -201,6 +260,7 @@ export const aiTools: AITool[] = [
     rating: 5,
     url: 'https://learn.khanacademy.org/khan-academy-kids/',
     expertTip: '하루 20분씩 꾸준히 하면 효과가 큽니다. 아이가 직접 고르게 해주세요.',
+    badge: '🆓 완전 무료',
   },
   {
     id: 'autodraw',
@@ -212,7 +272,84 @@ export const aiTools: AITool[] = [
     rating: 3,
     url: 'https://www.autodraw.com',
     expertTip: '아이와 함께 그림 그리기 놀이를 하면서 자연스럽게 AI를 경험하게 해줄 수 있어요.',
+    badge: '🔰 입문자 추천',
+  },
+
+  // ── 창작용 ──
+  {
+    id: 'suno',
+    name: 'Suno AI',
+    emoji: '🎵',
+    description: '텍스트만 입력하면 노래를 만들어주는 AI 음악 생성 도구',
+    target: '창작용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://suno.com',
+    expertTip: '영어 단어를 노래 가사로 만들면 재미있게 외울 수 있어요. 학생들 반응이 폭발적!',
+    badge: '🔥 인기',
+  },
+  {
+    id: 'clovanote',
+    name: '클로바노트 (Clova Note)',
+    emoji: '📋',
+    description: '네이버의 AI 음성 인식 서비스. 강의·회의 녹음을 한국어 텍스트로 자동 변환',
+    target: '창작용',
+    pricing: '무료',
+    rating: 4,
+    url: 'https://clovanote.naver.com',
+    expertTip: '한국어 인식률이 가장 높아요. 강의 녹음 → 텍스트 변환 → 요약까지 한 번에.',
+    badge: '🆓 완전 무료',
+  },
+  {
+    id: 'midjourney',
+    name: 'Midjourney',
+    emoji: '🖼️',
+    description: '텍스트로 설명하면 예술적 수준의 이미지를 생성하는 AI. 디자인/마케팅 필수 도구',
+    target: '창작용',
+    pricing: '유료',
+    rating: 5,
+    url: 'https://www.midjourney.com',
+    expertTip: '교육 자료에 들어갈 일러스트, 발표 배경 이미지를 만들 때 퀄리티가 압도적이에요.',
+    badge: '🏆 전문가용',
+  },
+
+  // ── 개발자용 ──
+  {
+    id: 'cursor',
+    name: 'Cursor',
+    emoji: '🖥️',
+    description: 'AI가 내장된 코드 에디터. 자연어로 설명하면 코드를 작성·수정·디버깅해주는 차세대 IDE',
+    target: '개발자용',
+    pricing: '무료+유료',
+    rating: 5,
+    url: 'https://cursor.com',
+    expertTip: '코딩 초보자도 AI와 대화하면서 웹사이트를 만들 수 있어요. 바이브코딩의 대표 도구.',
+    badge: '🔥 인기',
+  },
+  {
+    id: 'claude-code',
+    name: 'Claude Code',
+    emoji: '🛠️',
+    description: '터미널에서 AI와 함께 코딩하는 에이전트. 프로젝트 전체를 이해하고 코드를 작성·리팩토링',
+    target: '개발자용',
+    pricing: '유료',
+    rating: 5,
+    url: 'https://claude.ai',
+    expertTip: '이 사이트(스마트에듀픽)도 Claude Code로 만들었어요! 복잡한 프로젝트도 자연어로 지시하면 됩니다.',
+    badge: '🏆 전문가용',
+  },
+  {
+    id: 'replit',
+    name: 'Replit',
+    emoji: '💡',
+    description: '브라우저에서 바로 코딩+배포. AI 에이전트가 앱을 자동 생성해주는 클라우드 개발 환경',
+    target: '개발자용',
+    pricing: '무료+유료',
+    rating: 4,
+    url: 'https://replit.com',
+    expertTip: '설치 없이 브라우저에서 바로 시작할 수 있어서 코딩 입문자에게 최고의 선택이에요.',
+    badge: '🔰 입문자 추천',
   },
 ];
 
-export const ALL_TARGETS: ToolTarget[] = ['교사용', '학생용', '직장인용', '학부모용'];
+export const ALL_TARGETS: ToolTarget[] = ['교사용', '학생용', '직장인용', '학부모용', '창작용', '개발자용'];

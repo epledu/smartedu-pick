@@ -5,7 +5,7 @@ import ToolGrid from '@/components/tools/ToolGrid';
 export const metadata: Metadata = {
   title: 'AI 도구 추천 | 현직 전문가가 픽한 AI 도구',
   description:
-    '교사, 학생, 직장인, 학부모를 위한 AI 도구 추천. 현직 에듀테크 전문가가 직접 써보고 추천합니다.',
+    '교사, 학생, 직장인, 학부모, 크리에이터, 개발자를 위한 AI 도구 25개 추천. 현직 에듀테크 전문가가 직접 써보고 추천합니다.',
   keywords: 'AI도구추천, ChatGPT, Claude, 교육AI, 학습도구, AI교사도구, AI학생도구',
 };
 

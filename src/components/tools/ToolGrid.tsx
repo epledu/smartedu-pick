@@ -1,50 +1,44 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { aiTools, ALL_TARGETS, TARGET_EMOJI, PRICING_STYLE } from '@/data/ai-tools';
+import { aiTools, ALL_TARGETS, TARGET_EMOJI, PRICING_STYLE, BADGE_STYLE } from '@/data/ai-tools';
 import type { AITool, ToolTarget } from '@/data/ai-tools';
 
 /* ── Usage category mapping ── */
-type UsageCategory = '글쓰기/문서' | '디자인/발표' | '학습/교육' | '리서치/검색' | '기타';
+type UsageCategory = '글쓰기/문서' | '디자인/발표' | '학습/교육' | '리서치/검색' | '음악/음성' | '개발/자동화';
 const USAGE_MAP: Record<string, UsageCategory> = {
   chatgpt: '글쓰기/문서', claude: '글쓰기/문서', wrtn: '글쓰기/문서', 'notion-ai': '글쓰기/문서',
-  'canva-ai': '디자인/발표', gamma: '디자인/발표', miricanvas: '디자인/발표',
-  'khan-academy': '학습/교육', quizlet: '학습/교육', notebooklm: '학습/교육', 'khan-kids': '학습/교육', speak: '학습/교육',
+  'canva-ai': '디자인/발표', gamma: '디자인/발표', miricanvas: '디자인/발표', midjourney: '디자인/발표',
+  'khan-academy': '학습/교육', quizlet: '학습/교육', notebooklm: '학습/교육', 'khan-kids': '학습/교육', speak: '학습/교육', mathway: '학습/교육', diffit: '학습/교육',
   perplexity: '리서치/검색', gemini: '리서치/검색',
-  suno: '기타', autodraw: '기타',
+  suno: '음악/음성', clovanote: '음악/음성', otter: '음악/음성', autodraw: '디자인/발표',
+  cursor: '개발/자동화', 'claude-code': '개발/자동화', replit: '개발/자동화', zapier: '개발/자동화',
 };
 const USAGE_EMOJI: Record<UsageCategory, string> = {
-  '글쓰기/문서': '✍️', '디자인/발표': '🎨', '학습/교육': '📚', '리서치/검색': '🔍', '기타': '🎵',
+  '글쓰기/문서': '✍️', '디자인/발표': '🎨', '학습/교육': '📚', '리서치/검색': '🔍', '음악/음성': '🎵', '개발/자동화': '💻',
 };
-const ALL_USAGES: UsageCategory[] = ['글쓰기/문서', '디자인/발표', '학습/교육', '리서치/검색', '기타'];
-
-/* ── Badge logic ── */
-function getBadges(tool: AITool): { label: string; color: string; bg: string }[] {
-  const badges: { label: string; color: string; bg: string }[] = [];
-  if (tool.rating === 5) badges.push({ label: '🔥 인기', color: '#DC2626', bg: '#FEF2F2' });
-  if (tool.pricing === '무료') badges.push({ label: '🆓 완전 무료', color: '#166534', bg: '#DCFCE7' });
-  if (['chatgpt', 'perplexity', 'khan-academy', 'khan-kids', 'autodraw'].includes(tool.id))
-    badges.push({ label: '🔰 입문자 추천', color: '#2563EB', bg: '#EFF6FF' });
-  if (['claude', 'notion-ai', 'gemini'].includes(tool.id))
-    badges.push({ label: '🏆 전문가용', color: '#7C3AED', bg: '#F5F3FF' });
-  return badges;
-}
+const ALL_USAGES: UsageCategory[] = ['글쓰기/문서', '디자인/발표', '학습/교육', '리서치/검색', '음악/음성', '개발/자동화'];
 
 /* ── Quick Recommend mapping ── */
 type QuickUse = '수업 설계' | '글쓰기' | '디자인' | '리서치' | '학습' | '자녀 교육';
 const QUICK_MAP: Record<string, Record<string, string[]>> = {
-  '교사용': { '수업 설계': ['chatgpt', 'claude', 'gamma'], '글쓰기': ['chatgpt', 'claude', 'wrtn'], '디자인': ['canva-ai', 'gamma', 'miricanvas'], '리서치': ['perplexity', 'gemini', 'notebooklm'], '학습': ['notebooklm', 'quizlet', 'khan-academy'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
-  '학생용': { '수업 설계': ['chatgpt', 'notebooklm', 'gamma'], '글쓰기': ['chatgpt', 'claude', 'wrtn'], '디자인': ['canva-ai', 'gamma', 'miricanvas'], '리서치': ['perplexity', 'gemini', 'chatgpt'], '학습': ['khan-academy', 'quizlet', 'speak'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
-  '직장인용': { '수업 설계': ['chatgpt', 'gamma', 'notebooklm'], '글쓰기': ['chatgpt', 'claude', 'notion-ai'], '디자인': ['canva-ai', 'gamma', 'miricanvas'], '리서치': ['perplexity', 'gemini', 'claude'], '학습': ['chatgpt', 'perplexity', 'notebooklm'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
+  '교사용': { '수업 설계': ['chatgpt', 'claude', 'gamma'], '글쓰기': ['chatgpt', 'claude', 'wrtn'], '디자인': ['canva-ai', 'gamma', 'miricanvas'], '리서치': ['perplexity', 'gemini', 'notebooklm'], '학습': ['notebooklm', 'quizlet', 'diffit'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
+  '학생용': { '수업 설계': ['chatgpt', 'notebooklm', 'gamma'], '글쓰기': ['chatgpt', 'claude', 'wrtn'], '디자인': ['canva-ai', 'gamma', 'miricanvas'], '리서치': ['perplexity', 'gemini', 'chatgpt'], '학습': ['khan-academy', 'quizlet', 'mathway'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
+  '직장인용': { '수업 설계': ['chatgpt', 'gamma', 'notebooklm'], '글쓰기': ['chatgpt', 'claude', 'notion-ai'], '디자인': ['canva-ai', 'gamma', 'midjourney'], '리서치': ['perplexity', 'gemini', 'claude'], '학습': ['chatgpt', 'perplexity', 'notebooklm'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
   '학부모용': { '수업 설계': ['chatgpt', 'gamma', 'notebooklm'], '글쓰기': ['chatgpt', 'wrtn', 'claude'], '디자인': ['canva-ai', 'miricanvas', 'gamma'], '리서치': ['perplexity', 'gemini', 'chatgpt'], '학습': ['khan-academy', 'quizlet', 'speak'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
+  '창작용': { '수업 설계': ['gamma', 'canva-ai', 'chatgpt'], '글쓰기': ['chatgpt', 'claude', 'wrtn'], '디자인': ['midjourney', 'canva-ai', 'miricanvas'], '리서치': ['perplexity', 'gemini', 'chatgpt'], '학습': ['notebooklm', 'chatgpt', 'perplexity'], '자녀 교육': ['khan-kids', 'autodraw', 'suno'] },
+  '개발자용': { '수업 설계': ['chatgpt', 'claude', 'gamma'], '글쓰기': ['chatgpt', 'claude', 'notion-ai'], '디자인': ['canva-ai', 'gamma', 'midjourney'], '리서치': ['perplexity', 'gemini', 'claude'], '학습': ['cursor', 'claude-code', 'replit'], '자녀 교육': ['khan-kids', 'autodraw', 'speak'] },
 };
-const QUICK_ROLES = ['교사', '학생', '직장인', '학부모'] as const;
+const QUICK_ROLES = ['교사', '학생', '직장인', '학부모', '크리에이터', '개발자'] as const;
+const QUICK_ROLE_TARGET: Record<(typeof QUICK_ROLES)[number], string> = {
+  '교사': '교사용', '학생': '학생용', '직장인': '직장인용', '학부모': '학부모용', '크리에이터': '창작용', '개발자': '개발자용',
+};
 const QUICK_USES: QuickUse[] = ['수업 설계', '글쓰기', '디자인', '리서치', '학습', '자녀 교육'];
 
 /* ── Tool Card ── */
 function ToolCard({ tool, highlight }: { tool: AITool; highlight?: boolean }) {
   const priceStyle = PRICING_STYLE[tool.pricing];
-  const badges = getBadges(tool);
+  const badgeStyle = tool.badge ? BADGE_STYLE[tool.badge] : null;
 
   return (
     <div className={`group rounded-2xl border bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${highlight ? 'border-primary/40 ring-2 ring-primary/10' : 'border-border'}`}>
@@ -59,12 +53,10 @@ function ToolCard({ tool, highlight }: { tool: AITool; highlight?: boolean }) {
         <span className="shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold" style={{ backgroundColor: priceStyle.bg, color: priceStyle.text }}>{tool.pricing}</span>
       </div>
 
-      {/* Badges */}
-      {badges.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-1.5">
-          {badges.map((b) => (
-            <span key={b.label} className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ backgroundColor: b.bg, color: b.color }}>{b.label}</span>
-          ))}
+      {/* Badge */}
+      {badgeStyle && (
+        <div className="mb-3">
+          <span className="rounded-full px-2.5 py-0.5 text-[11px] font-bold" style={{ backgroundColor: badgeStyle.bg, color: badgeStyle.color }}>{tool.badge}</span>
         </div>
       )}
 
@@ -103,7 +95,7 @@ export default function ToolGrid() {
   const editorPicks = aiTools.filter((t) => t.rating === 5);
 
   const quickResults = useMemo(() => {
-    const targetKey = `${quickRole}용` as ToolTarget;
+    const targetKey = QUICK_ROLE_TARGET[quickRole];
     const ids = QUICK_MAP[targetKey]?.[quickUse] || [];
     return ids.map((id) => aiTools.find((t) => t.id === id)).filter(Boolean) as AITool[];
   }, [quickRole, quickUse]);
@@ -161,9 +153,10 @@ export default function ToolGrid() {
 
       {/* ── Editor Picks ── */}
       <section className="mb-12">
-        <h2 className="mb-5 text-xl font-bold text-text-primary">
+        <h2 className="mb-1 text-xl font-bold text-text-primary">
           🏆 에디터 <span className="text-accent">픽</span>
         </h2>
+        <p className="mb-5 text-sm text-text-secondary">스마트에듀픽이 가장 추천하는 도구</p>
         <div className="grid gap-5 sm:grid-cols-2">
           {editorPicks.map((tool) => (
             <ToolCard key={tool.id} tool={tool} highlight />
@@ -198,6 +191,9 @@ export default function ToolGrid() {
               </button>
             ))}
           </div>
+          <p className="mb-4 text-sm text-text-secondary">
+            총 <strong className="text-text-primary">{filteredByTarget.length}개</strong> 도구
+          </p>
           <div className="grid gap-5 sm:grid-cols-2">
             {filteredByTarget.map((tool) => <ToolCard key={tool.id} tool={tool} />)}
           </div>
@@ -224,18 +220,20 @@ export default function ToolGrid() {
       <section className="mt-16">
         <h2 className="mb-6 text-xl font-bold text-text-primary">📊 한눈에 비교하기</h2>
         <div className="overflow-x-auto rounded-2xl border border-border">
-          <table className="w-full min-w-[600px] text-sm">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-border bg-bg">
                 <th className="sticky left-0 bg-bg px-4 py-3 text-left font-bold text-text-primary">도구</th>
                 <th className="px-4 py-3 text-left font-bold text-text-primary">대상</th>
                 <th className="px-4 py-3 text-left font-bold text-text-primary">가격</th>
                 <th className="px-4 py-3 text-center font-bold text-text-primary">추천도</th>
+                <th className="px-4 py-3 text-center font-bold text-text-primary">배지</th>
               </tr>
             </thead>
             <tbody>
               {aiTools.map((tool, i) => {
                 const priceStyle = PRICING_STYLE[tool.pricing];
+                const bStyle = tool.badge ? BADGE_STYLE[tool.badge] : null;
                 return (
                   <tr key={tool.id} className={`border-b border-border last:border-0 ${i % 2 === 0 ? 'bg-surface' : 'bg-bg/50'}`}>
                     <td className="sticky left-0 px-4 py-3 font-medium text-text-primary" style={{ backgroundColor: i % 2 === 0 ? '#fff' : '#FAFBFC' }}>
@@ -247,6 +245,9 @@ export default function ToolGrid() {
                     </td>
                     <td className="px-4 py-3 text-center text-yellow-400">
                       {'★'.repeat(tool.rating)}{'☆'.repeat(5 - tool.rating)}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      {bStyle && <span className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ backgroundColor: bStyle.bg, color: bStyle.color }}>{tool.badge}</span>}
                     </td>
                   </tr>
                 );

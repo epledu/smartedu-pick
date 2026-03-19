@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { incrementTestCount } from '@/lib/test-counter';
 import { studyMethods } from '@/data/tests/ai-study-method';
 import type { StudyMethodType } from '@/data/tests/ai-study-method';
 import StudyRoutineCard from '@/components/test/StudyRoutineCard';
@@ -87,6 +88,12 @@ function StudyMethodResultContent() {
   const searchParams = useSearchParams();
   const primaryParam = (searchParams.get('primary') || 'prompt-writer') as StudyMethodType;
   const secondaryParam = (searchParams.get('secondary') || 'visual-noter') as StudyMethodType;
+  const [participantCount, setParticipantCount] = useState(0);
+
+  useEffect(() => {
+    const count = incrementTestCount('ai-study-method');
+    setParticipantCount(count);
+  }, []);
 
   const primary = studyMethods[primaryParam] ? primaryParam : 'prompt-writer';
   const secondary = studyMethods[secondaryParam] ? secondaryParam : (primary === 'prompt-writer' ? 'visual-noter' : 'prompt-writer');
@@ -109,6 +116,12 @@ function StudyMethodResultContent() {
             다시 테스트하기
           </Link>
         </div>
+
+        {participantCount > 0 && (
+          <p className="mb-4 text-center text-sm text-text-secondary">
+            🎉 <strong className="text-primary">{participantCount.toLocaleString()}</strong>번째 참여자입니다!
+          </p>
+        )}
 
         {/* Result Card */}
         <section

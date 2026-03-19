@@ -9,6 +9,7 @@ import { calculateResult } from '@/lib/test-utils';
 import { event as gaEvent } from '@/lib/analytics';
 import TestProgress from '@/components/test/TestProgress';
 import QuestionCard from '@/components/test/QuestionCard';
+import TestParticipants from '@/components/test/TestParticipants';
 
 type Phase = 'intro' | 'questions' | 'calculating';
 
@@ -84,7 +85,9 @@ export default function LearningStyleTestPage() {
             <span>📊 12문항</span>
           </div>
 
-          <div className="space-y-3">
+          <TestParticipants testId="learning-style" />
+
+          <div className="mt-6 space-y-3">
             <button
               onClick={handleStart}
               className="inline-flex h-14 w-full max-w-xs items-center justify-center rounded-full bg-primary text-lg font-bold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-dark hover:shadow-xl active:scale-95"

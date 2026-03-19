@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { incrementTestCount, formatCount } from '@/lib/test-counter';
 import { learningTypes } from '@/data/tests/learning-style';
 import type { LearningType } from '@/data/tests/learning-style';
 import { getScorePercentages } from '@/lib/test-utils';
@@ -19,6 +20,12 @@ function ResultContent() {
   const searchParams = useSearchParams();
   const type = (searchParams.get('type') || 'visual') as LearningType;
   const answersParam = searchParams.get('answers') || '';
+  const [participantCount, setParticipantCount] = useState(0);
+
+  useEffect(() => {
+    const count = incrementTestCount('learning-style');
+    setParticipantCount(count);
+  }, []);
 
   const typeInfo = learningTypes[type] || learningTypes.visual;
 
@@ -53,6 +60,12 @@ function ResultContent() {
             다시 테스트하기
           </Link>
         </div>
+
+        {participantCount > 0 && (
+          <p className="mb-4 text-center text-sm text-text-secondary">
+            🎉 <strong className="text-primary">{participantCount.toLocaleString()}</strong>번째 참여자입니다!
+          </p>
+        )}
 
         {/* Result Card */}
         <ResultCard typeInfo={typeInfo} />

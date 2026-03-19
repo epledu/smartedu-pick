@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { incrementTestCount } from '@/lib/test-counter';
 import { aiLevels, DIFFICULTY_COLORS } from '@/data/tests/ai-literacy';
 import type { AILevel, AILevelInfo } from '@/data/tests/ai-literacy';
 import { calculateExpProgress } from '@/lib/test-utils';
@@ -172,6 +173,12 @@ function AIResultContent() {
   const searchParams = useSearchParams();
   const levelParam = parseInt(searchParams.get('level') || '3', 10) as AILevel;
   const scoreParam = parseInt(searchParams.get('score') || '25', 10);
+  const [participantCount, setParticipantCount] = useState(0);
+
+  useEffect(() => {
+    const count = incrementTestCount('ai-literacy');
+    setParticipantCount(count);
+  }, []);
 
   const level = (levelParam >= 1 && levelParam <= 5 ? levelParam : 3) as AILevel;
   const totalScore = Math.max(10, Math.min(40, scoreParam));
@@ -201,6 +208,12 @@ function AIResultContent() {
             다시 테스트하기
           </Link>
         </div>
+
+        {participantCount > 0 && (
+          <p className="mb-4 text-center text-sm text-text-secondary">
+            🎉 <strong className="text-primary">{participantCount.toLocaleString()}</strong>번째 참여자입니다!
+          </p>
+        )}
 
         {/* Level Badge */}
         <LevelBadge levelInfo={levelInfo} totalScore={totalScore} />

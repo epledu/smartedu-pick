@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { incrementTestCount } from '@/lib/test-counter';
 import { careerAITypes } from '@/data/tests/career-ai';
 import type { CareerAIType } from '@/data/tests/career-ai';
 import CareerAIScore from '@/components/test/CareerAIScore';
@@ -92,6 +93,12 @@ function CareerAIResultContent() {
   const searchParams = useSearchParams();
   const primaryParam = (searchParams.get('primary') || 'creator') as CareerAIType;
   const secondaryParam = (searchParams.get('secondary') || 'strategist') as CareerAIType;
+  const [participantCount, setParticipantCount] = useState(0);
+
+  useEffect(() => {
+    const count = incrementTestCount('career-ai');
+    setParticipantCount(count);
+  }, []);
 
   const primary = careerAITypes[primaryParam] ? primaryParam : 'creator';
   const secondary = careerAITypes[secondaryParam] ? secondaryParam : (primary === 'creator' ? 'strategist' : 'creator');
@@ -109,6 +116,12 @@ function CareerAIResultContent() {
             다시 테스트하기
           </Link>
         </div>
+
+        {participantCount > 0 && (
+          <p className="mb-4 text-center text-sm text-text-secondary">
+            🎉 <strong className="text-primary">{participantCount.toLocaleString()}</strong>번째 참여자입니다!
+          </p>
+        )}
 
         {/* ① Result Card */}
         <section className="overflow-hidden rounded-2xl border-2 text-center shadow-lg" style={{ borderColor: primaryInfo.color }}>

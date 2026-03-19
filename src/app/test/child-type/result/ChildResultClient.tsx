@@ -1,8 +1,9 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { incrementTestCount } from '@/lib/test-counter';
 import { childTypes, combinations, AGE_RANGE_COLORS } from '@/data/tests/child-type';
 import type { ChildType } from '@/data/tests/child-type';
 import { getChildScorePercentages } from '@/lib/test-utils';
@@ -101,6 +102,12 @@ function ChildResultContent() {
   const primaryParam = (searchParams.get('primary') || 'explorer') as ChildType;
   const secondaryParam = (searchParams.get('secondary') || 'creative') as ChildType;
   const answersParam = searchParams.get('answers') || '';
+  const [participantCount, setParticipantCount] = useState(0);
+
+  useEffect(() => {
+    const count = incrementTestCount('child-type');
+    setParticipantCount(count);
+  }, []);
 
   const primary = childTypes[primaryParam] ? primaryParam : 'explorer';
   const secondary = childTypes[secondaryParam] ? secondaryParam : (primary === 'explorer' ? 'creative' : 'explorer');
@@ -143,6 +150,12 @@ function ChildResultContent() {
             다시 테스트하기
           </Link>
         </div>
+
+        {participantCount > 0 && (
+          <p className="mb-4 text-center text-sm text-text-secondary">
+            🎉 <strong className="text-primary">{participantCount.toLocaleString()}</strong>번째 참여자입니다!
+          </p>
+        )}
 
         {/* Result Card */}
         <ChildResultCard

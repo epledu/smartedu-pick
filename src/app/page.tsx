@@ -3,13 +3,14 @@ import { getAllArticles } from '@/lib/articles';
 import { getCategoryById } from '@/data/categories';
 import { aiTools, PRICING_STYLE } from '@/data/ai-tools';
 import ArticleTabs from '@/components/home/ArticleTabs';
+import TestCountBadge from '@/components/test/TestCountBadge';
 
 const PICK_TESTS = [
-  { emoji: '📋', title: '나의 학습유형 테스트', desc: '나에게 딱 맞는 공부법을 찾아보세요', href: '/test/learning-style', badge: 'PICK', meta: '약 3분 · 12문항', participants: '1,234명 참여', color: '#2563EB' },
-  { emoji: '🤖', title: 'AI 활용 능력 진단', desc: '당신의 AI 레벨은? Lv.1~Lv.5', href: '/test/ai-literacy', badge: 'HOT', meta: '약 2분 · 10문항', participants: '987명 참여', color: '#059669' },
-  { emoji: '👶', title: '우리 아이 학습 성향 분석', desc: '아이에게 맞는 교육법을 알아보세요', href: '/test/child-type', badge: '', meta: '약 3분 · 10문항', participants: '856명 참여', color: '#F59E0B' },
-  { emoji: '🧠', title: 'AI 공부법 추천', desc: 'AI 도구 + 학습법 조합 루틴 찾기', href: '/test/ai-study-method', badge: 'NEW', meta: '약 2분 · 10문항', participants: '524명 참여', color: '#7C3AED' },
-  { emoji: '💼', title: 'AI 시대 직업 적성', desc: 'AI 대체 안전도 + 협업 시너지 진단', href: '/test/career-ai', badge: 'NEW', meta: '약 3분 · 12문항', participants: '712명 참여', color: '#EC4899' },
+  { emoji: '📋', title: '나의 학습유형 테스트', desc: '나에게 딱 맞는 공부법을 찾아보세요', href: '/test/learning-style', badge: 'PICK', meta: '약 3분 · 12문항', testId: 'learning-style', color: '#2563EB' },
+  { emoji: '🤖', title: 'AI 활용 능력 진단', desc: '당신의 AI 레벨은? Lv.1~Lv.5', href: '/test/ai-literacy', badge: 'HOT', meta: '약 2분 · 10문항', testId: 'ai-literacy', color: '#059669' },
+  { emoji: '👶', title: '우리 아이 학습 성향 분석', desc: '아이에게 맞는 교육법을 알아보세요', href: '/test/child-type', badge: '', meta: '약 3분 · 10문항', testId: 'child-type', color: '#F59E0B' },
+  { emoji: '🧠', title: 'AI 공부법 추천', desc: 'AI 도구 + 학습법 조합 루틴 찾기', href: '/test/ai-study-method', badge: 'NEW', meta: '약 2분 · 10문항', testId: 'ai-study-method', color: '#7C3AED' },
+  { emoji: '💼', title: 'AI 시대 직업 적성', desc: 'AI 대체 안전도 + 협업 시너지 진단', href: '/test/career-ai', badge: 'NEW', meta: '약 3분 · 12문항', testId: 'career-ai', color: '#EC4899' },
 ];
 
 const HOME_TOOLS = aiTools.slice(0, 6);
@@ -131,7 +132,7 @@ export default function Home() {
                   <p className="mb-3 text-xs leading-relaxed text-text-secondary">{test.desc}</p>
                   <div className="mt-auto">
                     <span className="block text-[11px] text-text-secondary">{test.meta}</span>
-                    <span className="block text-[11px] text-text-secondary">{test.participants}</span>
+                    <TestCountBadge testId={test.testId} duration="" />
                   </div>
                   <span className="mt-3 inline-block rounded-full bg-primary px-3 py-1 text-center text-xs font-semibold text-white transition-all group-hover:bg-primary-dark">
                     시작하기 →

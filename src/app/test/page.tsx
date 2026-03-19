@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import TestCountBadge from '@/components/test/TestCountBadge';
 
 export const metadata: Metadata = {
   title: '교육 테스트',
@@ -17,7 +18,8 @@ const TESTS = [
     emoji: '📋',
     title: '나의 학습유형 테스트',
     desc: '12개 질문으로 알아보는 나만의 공부 스타일',
-    meta: '약 3분 | 참여자 1,234명',
+    duration: '약 3분',
+    testId: 'learning-style',
     href: '/test/learning-style',
     active: true,
     badge: 'PICK',
@@ -26,7 +28,8 @@ const TESTS = [
     emoji: '🤖',
     title: 'AI 활용 능력 진단',
     desc: '당신의 AI 레벨은? Lv.1~Lv.5',
-    meta: '약 2분 | 참여자 987명',
+    duration: '약 2분',
+    testId: 'ai-literacy',
     href: '/test/ai-literacy',
     active: true,
     badge: 'HOT',
@@ -35,7 +38,8 @@ const TESTS = [
     emoji: '👶',
     title: '우리 아이 학습 성향 분석',
     desc: '아이에게 맞는 교육법을 알아보세요',
-    meta: '약 3분 | 참여자 856명',
+    duration: '약 3분',
+    testId: 'child-type',
     href: '/test/child-type',
     active: true,
     badge: '',
@@ -44,7 +48,8 @@ const TESTS = [
     emoji: '🧠',
     title: '나에게 맞는 AI 공부법 추천',
     desc: 'AI 도구 + 학습법 조합으로 나만의 학습 루틴 찾기',
-    meta: '약 2분 | 10문항',
+    duration: '약 2분',
+    testId: 'ai-study-method',
     href: '/test/ai-study-method',
     active: true,
     badge: '',
@@ -53,7 +58,8 @@ const TESTS = [
     emoji: '💼',
     title: 'AI 시대 직업 적성 테스트',
     desc: 'AI 시대, 나에게 맞는 커리어 방향은? AI 대체 안전도 확인',
-    meta: '약 3분 | 12문항',
+    duration: '약 3분',
+    testId: 'career-ai',
     href: '/test/career-ai',
     active: true,
     badge: 'NEW',
@@ -96,7 +102,7 @@ export default function TestPage() {
                     </h2>
                     <p className="mb-3 text-sm text-text-secondary md:text-base">{test.desc}</p>
                     <div className="flex items-center gap-4">
-                      <span className="text-xs text-text-secondary">{test.meta}</span>
+                      <TestCountBadge testId={test.testId} duration={test.duration} />
                       <span className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-white transition-all group-hover:bg-primary-dark">
                         테스트 시작하기 →
                       </span>

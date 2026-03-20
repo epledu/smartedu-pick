@@ -1,23 +1,40 @@
 import Link from 'next/link';
 
-const TEST_MAP: Record<string, { emoji: string; title: string; desc: string; href: string }> = {
+const TEST_MAP: Record<string, { emoji: string; title: string; desc: string; href: string; cta: string }> = {
   'learning-style': {
     emoji: '📋',
-    title: '나의 학습유형 테스트',
+    title: '무료 학습유형 테스트',
     desc: '12개 질문으로 알아보는 나만의 공부 스타일',
     href: '/test/learning-style',
+    cta: '무료 학습유형 테스트 해보기 →',
   },
   'ai-literacy': {
     emoji: '🤖',
-    title: 'AI 활용 능력 진단',
+    title: '무료 AI 활용 능력 진단',
     desc: '당신의 AI 레벨은? Lv.1~Lv.5',
     href: '/test/ai-literacy',
+    cta: '무료 AI 레벨 진단 해보기 →',
   },
   'child-type': {
     emoji: '👶',
-    title: '우리 아이 학습 성향 분석',
+    title: '무료 아이 학습 성향 분석',
     desc: '아이에게 맞는 교육법을 알아보세요',
     href: '/test/child-type',
+    cta: '무료 아이 성향 분석 해보기 →',
+  },
+  'ai-study-method': {
+    emoji: '🧠',
+    title: '무료 AI 공부법 추천',
+    desc: 'AI 도구+학습법 조합 나만의 루틴 찾기',
+    href: '/test/ai-study-method',
+    cta: '무료 AI 공부법 추천받기 →',
+  },
+  'career-ai': {
+    emoji: '💼',
+    title: '무료 AI 직업 적성 테스트',
+    desc: 'AI 대체 안전도 + 협업 시너지 진단',
+    href: '/test/career-ai',
+    cta: '무료 AI 직업 적성 진단 →',
   },
 };
 
@@ -71,7 +88,7 @@ export default function RelatedTests({ testIds, variant = 'bottom' }: RelatedTes
               <p className="text-sm text-text-secondary">{test.desc}</p>
             </div>
             <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
-              해보기 →
+              무료 테스트 →
             </span>
           </Link>
         ))}

@@ -17,7 +17,7 @@ const ALL_TESTS: {
   {
     id: 'learning-style',
     emoji: '📋',
-    title: '나의 학습유형 테스트',
+    title: '무료 학습유형 테스트',
     desc: '12개 질문으로 알아보는 나만의 공부 스타일',
     href: '/test/learning-style',
     participants: '1,234명 참여',
@@ -25,7 +25,7 @@ const ALL_TESTS: {
   {
     id: 'ai-literacy',
     emoji: '🤖',
-    title: 'AI 활용 능력 진단',
+    title: '무료 AI 활용 능력 진단',
     desc: '당신의 AI 레벨은? Lv.1~Lv.5',
     href: '/test/ai-literacy',
     participants: '987명 참여',
@@ -33,7 +33,7 @@ const ALL_TESTS: {
   {
     id: 'child-type',
     emoji: '👶',
-    title: '우리 아이 학습 성향 분석',
+    title: '무료 아이 학습 성향 분석',
     desc: '아이에게 맞는 교육법을 알아보세요',
     href: '/test/child-type',
     participants: '856명 참여',
@@ -41,7 +41,7 @@ const ALL_TESTS: {
   {
     id: 'ai-study-method',
     emoji: '🧠',
-    title: 'AI 공부법 추천',
+    title: '무료 AI 공부법 추천',
     desc: 'AI 도구+학습법 조합 나만의 루틴 찾기',
     href: '/test/ai-study-method',
     participants: '524명 참여',
@@ -49,7 +49,7 @@ const ALL_TESTS: {
   {
     id: 'career-ai',
     emoji: '💼',
-    title: 'AI 시대 직업 적성',
+    title: '무료 AI 직업 적성 테스트',
     desc: 'AI 대체 안전도 + 협업 시너지 진단',
     href: '/test/career-ai',
     participants: '712명 참여',
@@ -77,7 +77,7 @@ export default function OtherTests({ currentTest }: OtherTestsProps) {
             <div className="flex items-center justify-between">
               <span className="text-[11px] text-text-secondary">{test.participants}</span>
               <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
-                테스트 시작 →
+                무료 테스트 시작 →
               </span>
             </div>
           </Link>
@@ -88,7 +88,7 @@ export default function OtherTests({ currentTest }: OtherTestsProps) {
           href="/test"
           className="inline-flex h-11 items-center rounded-full border-2 border-primary px-6 text-sm font-semibold text-primary transition-all hover:bg-primary hover:text-white"
         >
-          모든 테스트 보기 →
+          무료 테스트 모음 보기 →
         </Link>
       </div>
     </section>

@@ -15,6 +15,11 @@ export const websiteJsonLd = {
   '@type': 'WebSite',
   name: SITE.name,
   url: SITE.url,
-  description: SITE.description,
+  description: 'AI가 골라주는 나에게 딱 맞는 교육',
   inLanguage: 'ko',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${SITE.url}/articles?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
 };

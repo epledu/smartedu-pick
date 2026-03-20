@@ -32,6 +32,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: meta.description,
     keywords: meta.tags.join(', '),
     authors: [{ name: meta.author }],
+    alternates: {
+      canonical: `https://smartedu-pick.com/articles/${slug}`,
+    },
     openGraph: {
       title: `${meta.title} | 스마트에듀픽`,
       description: meta.description,

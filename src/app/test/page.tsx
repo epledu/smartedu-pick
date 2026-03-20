@@ -4,12 +4,12 @@ import TestCountBadge from '@/components/test/TestCountBadge';
 import ProfileCTA from '@/components/test/ProfileCTA';
 
 export const metadata: Metadata = {
-  title: '교육 테스트',
-  description: '학습유형 테스트, AI 활용 능력 진단 등 나에게 맞는 교육을 찾아보세요.',
-  keywords: '학습유형테스트, AI활용능력진단, 학습성향분석, 교육테스트',
+  title: '무료 학습유형·AI 테스트 모음 | 나에게 맞는 교육 찾기',
+  description: '학습유형 테스트, AI 활용 능력 진단, 아이 학습 성향 분석 등 5가지 무료 테스트로 나에게 딱 맞는 교육을 찾아보세요.',
+  keywords: '무료학습유형테스트, AI활용능력진단, 학습성향분석, 교육테스트, 무료테스트',
   openGraph: {
-    title: '교육 테스트 | 스마트에듀픽',
-    description: '학습유형 테스트, AI 활용 능력 진단 등 나에게 맞는 교육을 찾아보세요.',
+    title: '무료 학습유형·AI 테스트 모음 | 나에게 맞는 교육 찾기 - 스마트에듀픽',
+    description: '학습유형 테스트, AI 활용 능력 진단, 아이 학습 성향 분석 등 5가지 무료 테스트로 나에게 딱 맞는 교육을 찾아보세요.',
     url: 'https://smartedu-pick.com/test',
   },
 };
@@ -110,7 +110,7 @@ export default function TestPage() {
                     <div className="flex items-center gap-4">
                       <TestCountBadge testId={test.testId} duration={test.duration} />
                       <span className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-white transition-all group-hover:bg-primary-dark">
-                        테스트 시작하기 →
+                        무료 테스트 시작하기 →
                       </span>
                     </div>
                   </div>

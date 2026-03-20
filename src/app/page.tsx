@@ -67,13 +67,13 @@ export default function Home() {
               href="/test"
               className="inline-flex h-13 items-center rounded-full bg-primary px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/30 active:scale-95"
             >
-              내 유형 알아보기 →
+              무료 학습유형 테스트 시작 →
             </Link>
             <Link
               href="/tools"
               className="inline-flex h-13 items-center rounded-full border-2 border-secondary px-8 text-base font-semibold text-secondary transition-all hover:bg-secondary hover:text-white active:scale-95"
             >
-              AI 도구 추천받기 →
+              AI 교육 도구 추천받기 →
             </Link>
           </div>
 
@@ -135,7 +135,7 @@ export default function Home() {
                     <TestCountBadge testId={test.testId} duration="" />
                   </div>
                   <span className="mt-3 inline-block rounded-full bg-primary px-3 py-1 text-center text-xs font-semibold text-white transition-all group-hover:bg-primary-dark">
-                    시작하기 →
+                    무료 테스트 시작 →
                   </span>
                 </div>
               </Link>
@@ -175,7 +175,7 @@ export default function Home() {
           </div>
           <div className="mt-8 text-center">
             <Link href="/tools" className="inline-flex h-11 items-center rounded-full border-2 border-primary px-6 text-sm font-semibold text-primary transition-all hover:bg-primary hover:text-white">
-              모든 AI 도구 보기 →
+              모든 AI 교육 도구 보기 →
             </Link>
           </div>
         </div>

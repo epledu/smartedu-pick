@@ -16,11 +16,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} | ${SITE.slogan}`,
+    default: '스마트에듀픽 | 무료 학습유형 테스트 & AI 교육 정보 플랫폼',
     template: `%s | ${SITE.name}`,
   },
-  description: SITE.description,
-  keywords: '학습유형테스트, AI도구추천, AI교육, 에듀테크, 학습성향분석',
+  description: '무료 학습유형 테스트, AI 활용 능력 진단, 아이 학습 성향 분석까지. 현직 에듀테크 전문가가 만드는 AI 교육 정보 플랫폼입니다.',
+  keywords: '무료학습유형테스트, AI활용능력진단, AI도구추천, AI교육, 에듀테크, 학습성향분석',
   authors: [{ name: SITE.name }],
   openGraph: {
     type: 'website',

@@ -37,6 +37,18 @@ export const metadata: Metadata = {
     description: '학습유형 테스트, AI 도구 추천, 교육 AI 가이드',
     images: ['/og/main-og.png'],
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.json',
   robots: { index: true, follow: true },
   verification: {
     google: process.env.NEXT_PUBLIC_GSC_ID || undefined,

@@ -88,6 +88,29 @@ export default function AIStudyMethodTestPage() {
 
           <TestParticipants testId="ai-study-method" />
 
+          {/* 테스트 소개 */}
+          <div className="mx-auto mt-8 max-w-md rounded-xl bg-gray-50 p-6 text-left dark:bg-gray-800/50">
+            <h2 className="mb-3 text-lg font-semibold text-text-primary">이 테스트는 어떤 테스트인가요?</h2>
+            <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+              AI 도구는 많은데 나에게 맞는 공부법 조합은 뭘까?
+              이 테스트는 프롬프트 작성형, 영상 요약형, 퀴즈 반복형 등
+              8가지 AI 학습 유형 중 나에게 맞는 방법을 찾아드립니다.
+              아침, 오후, 저녁, 주말별 나만의 AI 학습 루틴도 함께 제안합니다.
+            </p>
+            <p className="mb-2 font-medium text-text-primary">이런 분에게 추천해요</p>
+            <ul className="mb-4 space-y-1 text-sm text-text-secondary">
+              <li><span className="text-green-600">✓</span> AI로 공부하고 싶은데 뭐부터 시작할지 모르는 학생</li>
+              <li><span className="text-green-600">✓</span> 업무 역량을 AI로 키우고 싶은 직장인</li>
+              <li><span className="text-green-600">✓</span> 효율적인 AI 학습 루틴을 만들고 싶은 분</li>
+            </ul>
+            <p className="mb-2 font-medium text-text-primary">테스트 안내</p>
+            <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+              <li>• 10문항으로 약 2분이면 완료됩니다.</li>
+              <li>• 주추천 + 부추천 조합으로 결과가 나옵니다.</li>
+              <li>• 시간대별 AI 학습 루틴 카드를 제공합니다.</li>
+            </ul>
+          </div>
+
           <div className="mt-6 space-y-3">
             <button
               onClick={handleStart}

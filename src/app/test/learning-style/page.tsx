@@ -87,6 +87,30 @@ export default function LearningStyleTestPage() {
 
           <TestParticipants testId="learning-style" />
 
+          {/* 테스트 소개 */}
+          <div className="mx-auto mt-8 max-w-md rounded-xl bg-gray-50 p-6 text-left dark:bg-gray-800/50">
+            <h2 className="mb-3 text-lg font-semibold text-text-primary">이 테스트는 어떤 테스트인가요?</h2>
+            <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+              사람마다 정보를 받아들이고 기억하는 방식이 다릅니다.
+              시각적으로 보고 이해하는 사람, 소리로 듣고 기억하는 사람,
+              직접 해보면서 배우는 사람, 논리적으로 분석하며 정리하는 사람.
+              12개 질문에 답하면 나의 학습 유형을 알려주고,
+              유형에 맞는 공부법과 추천 AI 도구를 안내해드립니다.
+            </p>
+            <p className="mb-2 font-medium text-text-primary">이런 분에게 추천해요</p>
+            <ul className="mb-4 space-y-1 text-sm text-text-secondary">
+              <li><span className="text-green-600">✓</span> 공부를 열심히 하는데 성적이 안 오르는 학생</li>
+              <li><span className="text-green-600">✓</span> 나에게 맞는 효율적인 공부법을 찾고 싶은 직장인</li>
+              <li><span className="text-green-600">✓</span> 자녀의 학습 방법이 궁금한 학부모</li>
+            </ul>
+            <p className="mb-2 font-medium text-text-primary">테스트 안내</p>
+            <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+              <li>• 정답이 없는 테스트입니다. 평소 나와 가장 가까운 것을 골라주세요.</li>
+              <li>• 결과는 시각형, 청각형, 실행형, 분석형 4가지 유형으로 나옵니다.</li>
+              <li>• 유형별 맞춤 학습법과 추천 AI 도구도 함께 알려드립니다.</li>
+            </ul>
+          </div>
+
           <div className="mt-6 space-y-3">
             <button
               onClick={handleStart}

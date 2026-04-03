@@ -95,6 +95,31 @@ export default function ChildTypeTestPage() {
 
           <TestParticipants testId="child-type" />
 
+          {/* 테스트 소개 */}
+          <div className="mx-auto mt-8 max-w-md rounded-xl bg-gray-50 p-6 text-left dark:bg-gray-800/50">
+            <h2 className="mb-3 text-lg font-semibold text-text-primary">이 테스트는 어떤 테스트인가요?</h2>
+            <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+              아이마다 배우는 방식과 동기가 다릅니다.
+              호기심이 넘치는 탐험가형, 상상력이 풍부한 창의가형,
+              친구와 함께할 때 빛나는 사회형, 논리적으로 파고드는 논리형,
+              꾸준히 묵묵히 하는 꾸준형, 완벽을 추구하는 완벽주의형.
+              12개 질문에 답하면 아이의 주성향과 부성향을 알려주고,
+              유형에 맞는 교육법과 부모 가이드를 제공합니다.
+            </p>
+            <p className="mb-2 font-medium text-text-primary">이런 분에게 추천해요</p>
+            <ul className="mb-4 space-y-1 text-sm text-text-secondary">
+              <li><span className="text-green-600">✓</span> 아이의 공부 습관이 걱정되는 학부모</li>
+              <li><span className="text-green-600">✓</span> 아이에게 맞는 교육법을 찾고 싶은 부모님</li>
+              <li><span className="text-green-600">✓</span> 학생 성향을 파악하고 싶은 교사</li>
+            </ul>
+            <p className="mb-2 font-medium text-text-primary">테스트 안내</p>
+            <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+              <li>• 부모님이 평소 아이를 관찰한 내용을 바탕으로 답해주세요.</li>
+              <li>• 결과는 동물 캐릭터(🐱🦋🐶🦉🐢🦊)로 재미있게 알려드립니다.</li>
+              <li>• 유형별 해야 할 것 / 하지 말아야 할 것 가이드를 포함합니다.</li>
+            </ul>
+          </div>
+
           <div className="mt-6 space-y-3">
             <button
               onClick={handleStart}

@@ -88,6 +88,29 @@ export default function CareerAITestPage() {
 
           <TestParticipants testId="career-ai" />
 
+          {/* 테스트 소개 */}
+          <div className="mx-auto mt-8 max-w-md rounded-xl bg-gray-50 p-6 text-left dark:bg-gray-800/50">
+            <h2 className="mb-3 text-lg font-semibold text-text-primary">이 테스트는 어떤 테스트인가요?</h2>
+            <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+              AI가 내 직업을 대체할까? 아니면 오히려 시너지를 낼 수 있을까?
+              이 테스트는 AI 대체 안전도와 AI 협업 시너지를 2축으로 분석해서
+              AI 시대에 맞는 나만의 커리어 방향을 제시합니다.
+              어울리는 직업, 키워야 할 스킬, 6개월~1년 성장 경로도 알려드립니다.
+            </p>
+            <p className="mb-2 font-medium text-text-primary">이런 분에게 추천해요</p>
+            <ul className="mb-4 space-y-1 text-sm text-text-secondary">
+              <li><span className="text-green-600">✓</span> AI 시대 커리어 방향이 고민인 직장인</li>
+              <li><span className="text-green-600">✓</span> 진로를 고민 중인 대학생, 취준생</li>
+              <li><span className="text-green-600">✓</span> 자녀의 미래 직업이 궁금한 학부모</li>
+            </ul>
+            <p className="mb-2 font-medium text-text-primary">테스트 안내</p>
+            <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+              <li>• 12문항으로 약 3분이면 완료됩니다.</li>
+              <li>• AI 대체 안전도(1~10)와 AI 협업 시너지(1~10) 2축 스코어를 제공합니다.</li>
+              <li>• 이 테스트는 재미와 참고를 위한 것으로, 전문적인 진로 상담이 아닙니다.</li>
+            </ul>
+          </div>
+
           <div className="mt-6 space-y-3">
             <button
               onClick={handleStart}

@@ -1,8 +1,14 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
+import ExpertNote from '@/components/articles/ExpertNote';
+
+const mdxComponents = {
+  ExpertNote,
+};
 
 export async function renderMDX(source: string) {
   const { content } = await compileMDX({
     source,
+    components: mdxComponents,
     options: {
       parseFrontmatter: false,
     },

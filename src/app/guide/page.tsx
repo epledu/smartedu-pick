@@ -62,6 +62,11 @@ export default function GuidePage() {
             <p className="text-text-secondary">
               AI를 한 번도 써본 적 없어도 괜찮아요. 4단계면 충분합니다.
             </p>
+            <p className="mb-4 mt-3 text-text-secondary/80">
+              AI를 처음 접하는 분을 위한 가이드입니다.
+              ChatGPT가 뭔지, 어떻게 시작하는지, 흔히 하는 실수는 뭔지까지
+              처음부터 차근차근 안내합니다.
+            </p>
           </div>
 
           {/* Timeline */}
@@ -104,6 +109,11 @@ export default function GuidePage() {
             </h2>
             <p className="text-text-secondary">
               현직 에듀테크 전문가가 현장 경험을 바탕으로 안내합니다.
+            </p>
+            <p className="mb-4 mt-3 text-text-secondary/80">
+              수업에 AI를 활용하고 싶은 교사를 위한 가이드입니다.
+              AI 코스웨어의 개념부터 실제 수업 적용법,
+              평가에 AI를 활용하는 방법까지 현직자 관점에서 정리했습니다.
             </p>
           </div>
 
@@ -155,6 +165,11 @@ export default function GuidePage() {
             </h2>
             <p className="text-text-secondary">
               불안하지 않아도 돼요. 이것만 알면 충분합니다.
+            </p>
+            <p className="mb-4 mt-3 text-text-secondary/80">
+              AI 시대 자녀 교육이 고민인 학부모를 위한 가이드입니다.
+              아이의 학습 성향을 파악하고, 가정에서 할 수 있는
+              AI 교육 활동과 추천 도구를 안내합니다.
             </p>
           </div>
 

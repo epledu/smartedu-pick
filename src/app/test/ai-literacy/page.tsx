@@ -83,6 +83,29 @@ export default function AILiteracyTestPage() {
 
           <TestParticipants testId="ai-literacy" />
 
+          {/* 테스트 소개 */}
+          <div className="mx-auto mt-8 max-w-md rounded-xl bg-gray-50 p-6 text-left dark:bg-gray-800/50">
+            <h2 className="mb-3 text-lg font-semibold text-text-primary">이 테스트는 어떤 테스트인가요?</h2>
+            <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+              ChatGPT는 써봤는데 나는 AI를 제대로 활용하고 있는 걸까?
+              이 테스트는 AI 활용 능력을 Lv.1 입문부터 Lv.5 전문가까지
+              5단계로 진단합니다. 현재 나의 수준을 파악하고,
+              다음 레벨로 올라가기 위한 구체적인 학습 경로를 안내해드립니다.
+            </p>
+            <p className="mb-2 font-medium text-text-primary">이런 분에게 추천해요</p>
+            <ul className="mb-4 space-y-1 text-sm text-text-secondary">
+              <li><span className="text-green-600">✓</span> AI를 업무에 활용하고 싶은 직장인</li>
+              <li><span className="text-green-600">✓</span> AI 교육을 준비하는 교사</li>
+              <li><span className="text-green-600">✓</span> AI 활용 능력을 객관적으로 파악하고 싶은 분</li>
+            </ul>
+            <p className="mb-2 font-medium text-text-primary">테스트 안내</p>
+            <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+              <li>• 10문항으로 약 2분이면 완료됩니다.</li>
+              <li>• 결과는 Lv.1~Lv.5까지 5단계로 나옵니다.</li>
+              <li>• 다음 레벨로 가기 위한 추천 학습 경로와 도구를 알려드립니다.</li>
+            </ul>
+          </div>
+
           <div className="mt-6 space-y-3">
             <button
               onClick={handleStart}

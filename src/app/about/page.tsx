@@ -80,7 +80,43 @@ export default function AboutPage() {
           <div className="rounded-xl bg-primary/5 p-4 text-sm text-text-secondary">
             <p>※ 현업에서 직접 경험한 교육 AI 현장의 이야기를 전합니다.</p>
             <p className="mt-2 italic text-text-secondary/70">
-              ※ [현업 경험 추가 공간] — 직접 작성하세요
+              ※ 교육 현장에서 직접 경험한 이야기를 이곳에 기록하고 있습니다.
+            </p>
+          </div>
+        </section>
+
+        {/* Why */}
+        <section className="mb-12 rounded-2xl border border-border bg-surface p-8">
+          <h2 className="mb-4 text-xl font-bold text-text-primary">왜 이 사이트를 만들었나요?</h2>
+          <div className="space-y-3 leading-relaxed text-text-secondary">
+            <p>
+              에듀테크 회사에서 전국 학교에 AI 교육 솔루션을 도입하는 일을 하고 있습니다.
+              현장에서 교사, 학부모, 학생을 만나며 느낀 것은
+              &lsquo;좋은 AI 도구와 정보는 많지만, 나에게 맞는 것을 찾기가 어렵다&rsquo;는 것이었습니다.
+            </p>
+            <p>
+              학습유형 테스트로 내 공부 스타일을 파악하고,
+              검증된 AI 도구를 추천받고,
+              현직자의 시각에서 정리한 교육 AI 가이드를 읽을 수 있는 곳.
+              그래서 스마트에듀픽을 만들었습니다.
+            </p>
+          </div>
+        </section>
+
+        {/* Difference */}
+        <section className="mb-12 rounded-2xl border border-border bg-surface p-8">
+          <h2 className="mb-4 text-xl font-bold text-text-primary">다른 사이트와 뭐가 다른가요?</h2>
+          <div className="space-y-3 leading-relaxed text-text-secondary">
+            <p>
+              인터넷에 AI 교육 정보는 넘쳐나지만,
+              실제로 학교 현장에서 도입하고 운영해본 사람의 이야기는 드뭅니다.
+            </p>
+            <p>
+              스마트에듀픽의 모든 콘텐츠에는 현장 경험이 담겨 있습니다.
+              AI 코스웨어를 학교에 납품하면서 느낀 점,
+              교사 연수에서 선생님들이 실제로 고민하는 것,
+              학부모 상담에서 반복되는 질문들.
+              이런 현장의 목소리가 스마트에듀픽의 차별점입니다.
             </p>
           </div>
         </section>

@@ -1,7 +1,15 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { SITE, NAV_ITEMS, FOOTER_LINKS } from '@/lib/constants';
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Wallet section uses its own chrome — skip the marketing footer.
+  if (pathname?.startsWith('/wallet')) return null;
+
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-12">

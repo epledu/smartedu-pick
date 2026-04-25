@@ -8,8 +8,9 @@
  * All interactive targets are 44px+ for touch accessibility.
  */
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { User, Settings, LogOut, ChevronDown, Menu, Sun, Moon, Monitor } from "lucide-react";
+import { User, Settings, LogOut, ChevronDown, Menu, Sun, Moon, Monitor, ExternalLink } from "lucide-react";
 import type { Session } from "next-auth";
 import NotificationBell from "@/components/wallet/notifications/notification-bell";
 import { useTheme, type Theme } from "@/components/wallet/providers/theme-provider";
@@ -159,7 +160,7 @@ export default function Header({ user, onMenuClick }: HeaderProps) {
 
         {/* Dropdown menu */}
         {open && (
-          <div className="absolute right-0 mt-1 w-44 bg-white dark:bg-[#2a211c] rounded-xl shadow-lg border border-gray-100 dark:border-white/10 py-1 z-50">
+          <div className="absolute right-0 mt-1 w-52 bg-white dark:bg-[#2a211c] rounded-xl shadow-lg border border-gray-100 dark:border-white/10 py-1 z-50">
             <button
               type="button"
               className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 min-h-[44px]"
@@ -176,6 +177,15 @@ export default function Header({ user, onMenuClick }: HeaderProps) {
               <Settings className="w-4 h-4" />
               설정
             </button>
+            <hr className="my-1 border-gray-100 dark:border-white/10" />
+            <Link
+              href="/"
+              className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 min-h-[44px]"
+              onClick={() => setOpen(false)}
+            >
+              <ExternalLink className="w-4 h-4" />
+              스마트에듀픽 메인
+            </Link>
             <hr className="my-1 border-gray-100 dark:border-white/10" />
             <button
               type="button"

@@ -26,6 +26,7 @@ export const NAV_ITEMS = [
   { label: 'AI도구', href: '/tools' },
   { label: '아티클', href: '/articles' },
   { label: '가이드', href: '/guide' },
+  { label: '💰 지갑일기', href: '/wallet' },
 ];
 
 export const FOOTER_LINKS = [

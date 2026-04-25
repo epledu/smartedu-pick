@@ -2,11 +2,16 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { SITE, NAV_ITEMS } from '@/lib/constants';
 import MobileMenu from './MobileMenu';
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Wallet section renders its own dashboard chrome (sidebar + header).
+  if (pathname?.startsWith('/wallet')) return null;
 
   return (
     <>

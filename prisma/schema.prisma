@@ -1,0 +1,308 @@
+// Smart Budget App - Prisma Schema (PostgreSQL)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // In production (Vercel Postgres / Neon), use a pooled connection URL for DATABASE_URL
+  // and set DIRECT_URL to the non-pooled URL for Prisma migrations.
+  // See: https://www.prisma.io/docs/guides/performance-and-optimization/connection-management
+  url       = env("DATABASE_URL")
+  // directUrl is required when using a connection pooler (e.g., PgBouncer, Neon's pooler)
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+enum AccountType {
+  BANK
+  CARD
+  CASH
+  EPAY
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum PointType {
+  APPTECH
+  LOYALTY
+}
+
+enum PointHistoryType {
+  EARN
+  USE
+  EXPIRE
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  PAUSED
+}
+
+enum NotificationType {
+  BUDGET_WARNING
+  BUDGET_EXCEEDED
+  RECURRING_DUE
+  GOAL_PROGRESS
+  INSIGHT
+  SYSTEM
+}
+
+// ─── Auth Models (NextAuth.js) ────────────────────────────────────────────────
+// User account managed by NextAuth
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // NextAuth relations
+  accounts AuthAccount[]
+  sessions Session[]
+
+  // App relations
+  transactions      Transaction[]
+  categories        Category[]
+  budgets           Budget[]
+  recurringExpenses RecurringExpense[]
+  points            Point[]
+  goals             Goal[]
+  notifications     Notification[]
+  financialAccounts Account[]
+}
+
+// OAuth provider account (NextAuth)
+model AuthAccount {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// NextAuth session
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Financial Models ─────────────────────────────────────────────────────────
+// Financial account or wallet (bank, card, cash, e-pay)
+model Account {
+  id        String      @id @default(cuid())
+  userId    String
+  name      String
+  type      AccountType
+  balance   Decimal     @db.Decimal(15, 2)
+  currency  String      @default("KRW")
+  color     String?
+  icon      String?
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  // CODEF integration fields
+  // connectedId is the CODEF-issued token used for subsequent sync calls.
+  // We intentionally do NOT store bank passwords here.
+  codefConnectedId String?   // CODEF connectedId for real-bank sync
+  codefOrgCode     String?   // CODEF organization code (e.g. "0004")
+  codefAccountNum  String?   // Account number — required for bank (BK) transactions
+  lastSyncedAt     DateTime? // Timestamp of the most recent successful sync
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions             Transaction[] @relation("AccountTransactions")
+  transferToTransactions   Transaction[] @relation("TransferToAccount")
+  recurringExpenses        RecurringExpense[]
+}
+
+// Income, expense, or transfer record
+model Transaction {
+  id                  String          @id @default(cuid())
+  userId              String
+  accountId           String
+  categoryId          String
+  type                TransactionType
+  amount              Decimal         @db.Decimal(15, 2)
+  date                DateTime
+  memo                String?
+  merchantName        String?
+  receiptImageUrl     String?
+  isRecurring         Boolean         @default(false)
+  recurringExpenseId  String?
+  transferToAccountId String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account           Account           @relation("AccountTransactions", fields: [accountId], references: [id])
+  category          Category          @relation(fields: [categoryId], references: [id])
+  recurringExpense  RecurringExpense? @relation(fields: [recurringExpenseId], references: [id])
+  transferToAccount Account?          @relation("TransferToAccount", fields: [transferToAccountId], references: [id])
+
+  @@index([userId, date])
+  @@index([userId, categoryId])
+  @@index([accountId])
+}
+
+// Spending/income category with optional parent for subcategories
+model Category {
+  id        String   @id @default(cuid())
+  userId    String?
+  name      String
+  icon      String?
+  color     String?
+  isDefault Boolean  @default(false)
+  parentId  String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user   User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+
+  children     Category[]    @relation("CategoryHierarchy")
+  transactions Transaction[]
+  budgets      Budget[]
+  goals        Goal[]
+
+  @@index([userId])
+}
+
+// Monthly budget target per category
+model Budget {
+  id         String   @id @default(cuid())
+  userId     String
+  categoryId String
+  amount     Decimal  @db.Decimal(15, 2)
+  month      Int
+  year       Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([userId, categoryId, month, year])
+  @@index([userId, year, month])
+}
+
+// Scheduled recurring expense (subscription, rent, etc.)
+model RecurringExpense {
+  id          String    @id @default(cuid())
+  userId      String
+  accountId   String
+  categoryId  String
+  amount      Decimal   @db.Decimal(15, 2)
+  description String
+  frequency   Frequency
+  dayOfMonth  Int?
+  nextDueDate DateTime
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account      Account       @relation(fields: [accountId], references: [id])
+  transactions Transaction[]
+}
+
+// ─── Points & Loyalty ─────────────────────────────────────────────────────────
+// Loyalty/reward point balance per provider
+model Point {
+  id          String    @id @default(cuid())
+  userId      String
+  provider    String    // e.g. "NAVER_PAY", "TOSS", "KAKAO_PAY", "DAISO", "OLIVE_YOUNG", "OK_CASHBAG"
+  type        PointType
+  balance     Decimal   @db.Decimal(15, 2)
+  lastUpdated DateTime
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  history PointHistory[]
+
+  @@unique([userId, provider])
+  @@index([userId, provider])
+}
+
+// Individual earn/use/expire event for a point balance
+model PointHistory {
+  id          String           @id @default(cuid())
+  pointId     String
+  amount      Decimal          @db.Decimal(15, 2)
+  type        PointHistoryType
+  date        DateTime
+  description String?
+  createdAt   DateTime         @default(now())
+
+  point Point @relation(fields: [pointId], references: [id], onDelete: Cascade)
+}
+
+// ─── Goals ────────────────────────────────────────────────────────────────────
+// Savings or spending goal with progress tracking
+model Goal {
+  id            String     @id @default(cuid())
+  userId        String
+  title         String
+  targetAmount  Decimal    @db.Decimal(15, 2)
+  currentAmount Decimal    @default(0) @db.Decimal(15, 2)
+  categoryId    String?
+  startDate     DateTime
+  endDate       DateTime
+  status        GoalStatus @default(ACTIVE)
+  icon          String?
+  color         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
+}
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+// In-app notification for budget alerts, goal updates, etc.
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  isRead    Boolean          @default(false)
+  data      Json?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}

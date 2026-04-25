@@ -152,9 +152,16 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         })}
       </ul>
 
-      {/* Version footer */}
-      <div className="px-5 py-3 border-t border-gray-100 dark:border-white/10">
-        <p className="text-[10px] text-gray-300 dark:text-gray-600 text-center">v1.0.0</p>
+      {/* Back to SmartEdu Pick + version footer */}
+      <div className="px-3 py-3 border-t border-gray-100 dark:border-white/10 space-y-1">
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+        >
+          <span aria-hidden="true">🎯</span>
+          <span>스마트에듀픽 메인으로</span>
+        </Link>
+        <p className="text-[10px] text-gray-300 dark:text-gray-600 text-center pt-1">v1.0.0</p>
       </div>
     </nav>
   );

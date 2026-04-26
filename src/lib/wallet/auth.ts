@@ -240,21 +240,29 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    /** Provision user in DB on first sign-in, swallowing DB errors to keep login flow alive. */
+    /**
+     * Provision the DB user on first sign-in. We previously swallowed errors
+     * here to "keep the login flow alive" — but the middleware only checks
+     * for token existence, so a missing user.id resulted in a half-logged-in
+     * state: /wallet rendered while every /api/* call returned 401.
+     *
+     * Refusing the sign-in instead surfaces the real error and lets the user
+     * retry once the underlying DB issue is resolved.
+     */
     async signIn({ user }) {
-      if (!user.email) return true;
+      if (!user.email) return false;
       try {
         const dbId = await provisionUser({
           email: user.email,
           name: user.name,
           image: user.image,
         });
-        // Attach DB id so jwt callback can pick it up
         user.id = dbId;
+        return true;
       } catch (err) {
-        console.error("[Auth] provisionUser failed, allowing sign-in anyway:", err);
+        console.error("[Auth] provisionUser failed — denying sign-in:", err);
+        return false;
       }
-      return true;
     },
 
     /** Persist user.id in the JWT. */

@@ -68,6 +68,7 @@ export interface UpdateTransactionData {
   type?: "INCOME" | "EXPENSE" | "TRANSFER";
   amount?: number;
   date?: string;
+  accountId?: string;
   categoryId?: string;
   memo?: string;
   merchantName?: string;

@@ -1,5 +1,9 @@
 /**
- * NextAuth.js middleware for route protection.
+ * Next.js 16 proxy (formerly "middleware") for route protection.
+ *
+ * The file convention was renamed in Next 16 — same shape, same matcher,
+ * just lives at src/proxy.ts now. NextAuth's withAuth still works as the
+ * default export.
  *
  * Protects /wallet/* dashboard routes only — every other route on
  * smartedu-pick is public and bypasses the auth check entirely.
@@ -10,7 +14,7 @@ import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
-  function middleware() {
+  function proxy() {
     return NextResponse.next();
   },
   {

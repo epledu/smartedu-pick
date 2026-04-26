@@ -152,7 +152,7 @@ function ArticleListInner({ articles }: ArticleListClientProps) {
         <div className="mb-6 flex items-center gap-2">
           <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">#{tagParam}</span>
           <span className="text-sm text-text-secondary">태그로 필터 중 ({filtered.length}개)</span>
-          <a href="/articles" className="ml-auto text-xs text-text-secondary transition-colors hover:text-primary">필터 해제 ×</a>
+          <Link href="/articles" className="ml-auto text-xs text-text-secondary transition-colors hover:text-primary">필터 해제 ×</Link>
         </div>
       )}
 

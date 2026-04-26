@@ -4,12 +4,14 @@
  * Server component that fetches this month's summary stats,
  * recent transactions, budget progress, and upcoming recurring expenses.
  */
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getServerSession } from "@/lib/wallet/auth";
 import prisma from "@/lib/wallet/prisma";
 import { formatCurrency } from "@/lib/wallet/utils";
-import { InsightWidgetWrapper } from "@/components/wallet/insights/insight-widget-wrapper";
+import { InsightWidgetServer } from "@/components/wallet/insights/insight-widget-server";
+import { InsightWidget } from "@/components/wallet/insights/insight-widget";
 import { QuickActions } from "@/components/wallet/dashboard/quick-actions";
 import { BudgetProgressWidget } from "@/components/wallet/dashboard/budget-progress-widget";
 import { UpcomingRecurring } from "@/components/wallet/dashboard/upcoming-recurring";
@@ -200,8 +202,11 @@ export default async function DashboardPage() {
         {/* Budget progress */}
         <BudgetProgressWidget items={budgetItems} />
 
-        {/* Insight widget */}
-        <InsightWidgetWrapper />
+        {/* Insight widget — streams in via Suspense so the rest of the
+            dashboard paints without waiting on the analysis pipeline. */}
+        <Suspense fallback={<InsightWidget insights={[]} isLoading />}>
+          <InsightWidgetServer userId={userId} />
+        </Suspense>
 
         {/* Upcoming recurring */}
         <UpcomingRecurring items={recurringItems} />

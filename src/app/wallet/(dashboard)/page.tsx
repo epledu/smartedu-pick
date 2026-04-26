@@ -100,59 +100,48 @@ export default async function DashboardPage() {
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
   const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-  // Monthly transactions for aggregation
-  const monthlyTxs = await prisma.transaction.findMany({
-    where: { userId, date: { gte: monthStart, lt: monthEnd } },
-    select: { type: true, amount: true },
-  });
+  // Run all four DB reads in parallel — Singapore round-trip dominates,
+  // so collapsing the await chain saves ~3× round-trip latency on cold renders.
+  const [monthlyTxs, recentTxs, budgets, upcomingRecurring] = await Promise.all([
+    prisma.transaction.findMany({
+      where: { userId, date: { gte: monthStart, lt: monthEnd } },
+      select: { type: true, amount: true, categoryId: true },
+    }),
+    prisma.transaction.findMany({
+      where: { userId },
+      orderBy: { date: "desc" },
+      take: 5,
+      include: { category: { select: { name: true, color: true } } },
+    }),
+    prisma.budget.findMany({
+      where: { userId, month: now.getMonth() + 1, year: now.getFullYear() },
+      include: { category: { select: { id: true, name: true, color: true } } },
+      take: 3,
+      orderBy: { amount: "desc" },
+    }).catch(() => []),
+    prisma.recurringExpense.findMany({
+      where: { userId, nextDueDate: { gte: now, lte: nextWeek } },
+      orderBy: { nextDueDate: "asc" },
+      take: 5,
+      select: { id: true, description: true, amount: true, nextDueDate: true },
+    }).catch(() => []),
+  ]);
 
-  // Income / expense totals
+  // Income / expense totals + per-category expense (single pass over monthlyTxs)
   let totalIncome = 0;
   let totalExpense = 0;
+  const spendingByCategory: Record<string, number> = {};
   for (const tx of monthlyTxs) {
     const n = Number(tx.amount);
     if (tx.type === TX_TYPE.INCOME) totalIncome += n;
-    else if (tx.type === TX_TYPE.EXPENSE) totalExpense += n;
-  }
-  const balance = totalIncome - totalExpense;
-
-  // Last 5 transactions
-  const recentTxs = await prisma.transaction.findMany({
-    where: { userId },
-    orderBy: { date: "desc" },
-    take: 5,
-    include: { category: { select: { name: true, color: true } } },
-  });
-
-  // Budget progress: categories with budgets set this month
-  // Budget model uses month (1-12) and year (YYYY) as integers
-  const budgets = await prisma.budget.findMany({
-    where: { userId, month: now.getMonth() + 1, year: now.getFullYear() },
-    include: { category: { select: { id: true, name: true, color: true } } },
-    take: 3,
-    orderBy: { amount: "desc" },
-  }).catch(() => []);
-
-  // Spending per category for budget widget
-  const spendingByCategory: Record<string, number> = {};
-  if (budgets.length > 0) {
-    const catIds = budgets.map((b: { category: { id: string } }) => b.category.id);
-    const catTxs = await prisma.transaction.findMany({
-      where: {
-        userId,
-        date: { gte: monthStart, lt: monthEnd },
-        type: TX_TYPE.EXPENSE,
-        categoryId: { in: catIds },
-      },
-      select: { categoryId: true, amount: true },
-    });
-    for (const tx of catTxs) {
+    else if (tx.type === TX_TYPE.EXPENSE) {
+      totalExpense += n;
       if (tx.categoryId) {
-        spendingByCategory[tx.categoryId] =
-          (spendingByCategory[tx.categoryId] ?? 0) + Number(tx.amount);
+        spendingByCategory[tx.categoryId] = (spendingByCategory[tx.categoryId] ?? 0) + n;
       }
     }
   }
+  const balance = totalIncome - totalExpense;
 
   const budgetItems = budgets.map((b: { id: string; category: { id: string; name: string; color: string | null }; amount: object }) => ({
     id: b.id,
@@ -161,15 +150,6 @@ export default async function DashboardPage() {
     spent: spendingByCategory[b.category.id] ?? 0,
     budget: Number(b.amount),
   }));
-
-  // Upcoming recurring expenses (next 7 days)
-  // RecurringExpense model has no direct category relation — use categoryId only
-  const upcomingRecurring = await prisma.recurringExpense.findMany({
-    where: { userId, nextDueDate: { gte: now, lte: nextWeek } },
-    orderBy: { nextDueDate: "asc" },
-    take: 5,
-    select: { id: true, description: true, amount: true, nextDueDate: true },
-  }).catch(() => []);
 
   const recurringItems = upcomingRecurring.map((r: {
     id: string;

@@ -57,20 +57,21 @@ export async function GET(req: NextRequest) {
   const { start: prevStart, end: prevEnd } = getDateRange("month", prevYear, prevMonth);
 
   try {
-    // Fetch all transactions in range
-    const transactions = await prisma.transaction.findMany({
-      where: { userId, date: { gte: start, lte: end } },
-      include: {
-        category: { select: { id: true, name: true, color: true } },
-        account: { select: { id: true, name: true, color: true } },
-      },
-    });
-
-    // Previous month expense total for month-over-month
-    const prevTransactions = await prisma.transaction.findMany({
-      where: { userId, type: "EXPENSE", date: { gte: prevStart, lte: prevEnd } },
-      select: { amount: true },
-    });
+    // Run current and previous range fetches in parallel — DB latency dominates
+    // and these have no dependency on each other.
+    const [transactions, prevTransactions] = await Promise.all([
+      prisma.transaction.findMany({
+        where: { userId, date: { gte: start, lte: end } },
+        include: {
+          category: { select: { id: true, name: true, color: true } },
+          account: { select: { id: true, name: true, color: true } },
+        },
+      }),
+      prisma.transaction.findMany({
+        where: { userId, type: "EXPENSE", date: { gte: prevStart, lte: prevEnd } },
+        select: { amount: true },
+      }),
+    ]);
 
     // ── Summary ────────────────────────────────────────────────────────────
     let totalIncome = 0;
@@ -155,7 +156,15 @@ export async function GET(req: NextRequest) {
 
     const monthOverMonth = { thisMonth: totalExpense, lastMonth: lastMonthExpense, changePercent };
 
-    return NextResponse.json({ byCategory, byAccount, dailyTrend, summary, monthOverMonth });
+    return NextResponse.json(
+      { byCategory, byAccount, dailyTrend, summary, monthOverMonth },
+      {
+        headers: {
+          // Statistics are aggregate views — fine to serve a 1-minute-old result.
+          "Cache-Control": "private, max-age=60, stale-while-revalidate=300",
+        },
+      },
+    );
   } catch (err) {
     console.error("[statistics] GET error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

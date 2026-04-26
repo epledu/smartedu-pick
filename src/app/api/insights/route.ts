@@ -44,45 +44,37 @@ export async function GET() {
     // 30-day window for velocity and merchant analysis
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-    // Fetch all required data in parallel
-    const [thisMonthCats, lastMonthCats, recentTxs, budgets] = await Promise.all([
-      // This month's spending per category
+    // Fetch everything in a single parallel batch — the previous version did
+    // 4 queries in parallel then a sequential 5th category lookup, which added
+    // one extra Singapore round-trip. Pre-fetching all of the user's categories
+    // collapses it into one round-trip.
+    const [thisMonthCats, lastMonthCats, recentTxs, budgets, allCategories] = await Promise.all([
       prisma.transaction.groupBy({
         by: ["categoryId"],
         where: { userId, type: "EXPENSE", date: { gte: monthStart, lt: monthEnd } },
         _sum: { amount: true },
       }),
-      // Last month's spending per category
       prisma.transaction.groupBy({
         by: ["categoryId"],
         where: { userId, type: "EXPENSE", date: { gte: lastMonthStart, lt: lastMonthEnd } },
         _sum: { amount: true },
       }),
-      // Recent 30-day transactions for velocity and merchant analysis
       prisma.transaction.findMany({
         where: { userId, date: { gte: thirtyDaysAgo } },
         select: { date: true, amount: true, merchantName: true, type: true, categoryId: true },
         orderBy: { date: "desc" },
       }),
-      // Current month budgets with actual spending
       prisma.budget.findMany({
         where: { userId, year, month },
         include: { category: { select: { id: true, name: true } } },
       }),
+      prisma.category.findMany({
+        where: { userId },
+        select: { id: true, name: true },
+      }),
     ]);
 
-    // Resolve category names for this month aggregates
-    const allCategoryIds = [
-      ...thisMonthCats.map((r) => r.categoryId),
-      ...lastMonthCats.map((r) => r.categoryId),
-    ];
-    const categoryIds = allCategoryIds.filter((id, idx) => allCategoryIds.indexOf(id) === idx);
-
-    const categories = await prisma.category.findMany({
-      where: { id: { in: categoryIds } },
-      select: { id: true, name: true },
-    });
-    const catMap = new Map(categories.map((c) => [c.id, c.name]));
+    const catMap = new Map(allCategories.map((c) => [c.id, c.name]));
 
     // Build CategorySpend arrays
     const thisMonthSpend: CategorySpend[] = thisMonthCats.map((r) => ({
@@ -133,7 +125,13 @@ export async function GET() {
       avgDailySpend: velocity.avgDailyLast30,
     });
 
-    return NextResponse.json(insights);
+    // Browser-private cache: instant within 60s, stale-while-revalidate up to 5 min.
+    // Insights don't need to be real-time — a minute-old summary is fine.
+    return NextResponse.json(insights, {
+      headers: {
+        "Cache-Control": "private, max-age=60, stale-while-revalidate=300",
+      },
+    });
   } catch (err) {
     console.error("[GET /api/insights]", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

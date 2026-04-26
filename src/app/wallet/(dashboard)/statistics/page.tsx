@@ -7,13 +7,28 @@
  * Supports month, last-month, year, and custom month/year selection.
  */
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { RefreshCw } from "lucide-react";
 import { useStatistics, type StatPeriod } from "@/hooks/wallet/use-statistics";
 import StatSummaryCards from "@/components/wallet/charts/stat-summary-cards";
 import MonthComparison from "@/components/wallet/charts/month-comparison";
-import CategoryPieChart from "@/components/wallet/charts/category-pie-chart";
-import DailyTrendChart from "@/components/wallet/charts/daily-trend-chart";
 import { formatCurrency } from "@/lib/wallet/utils";
+
+// Recharts is ~200KB gzipped — defer it until the user actually opens
+// /wallet/statistics. ssr:false avoids the SVG/measurement mismatch on hydrate.
+const ChartFallback = () => (
+  <div className="h-56 sm:h-64 bg-gray-50 dark:bg-gray-900 rounded-lg animate-pulse" />
+);
+
+const CategoryPieChart = dynamic(
+  () => import("@/components/wallet/charts/category-pie-chart"),
+  { ssr: false, loading: ChartFallback },
+);
+
+const DailyTrendChart = dynamic(
+  () => import("@/components/wallet/charts/daily-trend-chart"),
+  { ssr: false, loading: ChartFallback },
+);
 
 // ---------------------------------------------------------------------------
 // Period presets

@@ -31,20 +31,31 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(parseInt(searchParams.get("limit") ?? "20", 10), 100);
 
   try {
-    const notifications = await prisma.notification.findMany({
-      where: {
-        userId,
-        ...(unreadOnly ? { isRead: false } : {}),
+    // Run findMany and count in parallel — saves one Singapore round-trip.
+    const [notifications, unreadCount] = await Promise.all([
+      prisma.notification.findMany({
+        where: {
+          userId,
+          ...(unreadOnly ? { isRead: false } : {}),
+        },
+        orderBy: { createdAt: "desc" },
+        take: isNaN(limit) ? 20 : limit,
+      }),
+      prisma.notification.count({
+        where: { userId, isRead: false },
+      }),
+    ]);
+
+    return NextResponse.json(
+      { notifications, unreadCount },
+      {
+        headers: {
+          // Browser-private short cache — bell badge updates feel instant
+          // on revisit without hammering the DB on every page navigation.
+          "Cache-Control": "private, max-age=15, stale-while-revalidate=60",
+        },
       },
-      orderBy: { createdAt: "desc" },
-      take: isNaN(limit) ? 20 : limit,
-    });
-
-    const unreadCount = await prisma.notification.count({
-      where: { userId, isRead: false },
-    });
-
-    return NextResponse.json({ notifications, unreadCount });
+    );
   } catch (error) {
     console.error("[GET /api/notifications]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

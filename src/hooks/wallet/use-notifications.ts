@@ -36,7 +36,9 @@ interface NotificationsResponse {
   unreadCount: number;
 }
 
-const POLL_INTERVAL = 30_000; // 30 seconds
+// 60s strikes a balance between staleness and DB load. With HTTP cache
+// (max-age=15, swr=60) most polls hit the browser cache instead of the DB.
+const POLL_INTERVAL = 60_000;
 
 // ---------------------------------------------------------------------------
 // Hook

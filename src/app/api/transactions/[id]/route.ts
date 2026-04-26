@@ -76,10 +76,12 @@ export async function PUT(
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { type, amount, date, categoryId, memo, merchantName, receiptImageUrl } = body as {
+  const { type, amount, date, accountId, categoryId, memo, merchantName, receiptImageUrl } = body as {
     type?: string;
     amount?: number;
     date?: string;
+    /** When provided, transfers the transaction (and its balance effect) to a different account. */
+    accountId?: string;
     categoryId?: string;
     memo?: string;
     merchantName?: string;
@@ -104,15 +106,49 @@ export async function PUT(
       return NextResponse.json({ error: "Transaction not found" }, { status: 404 });
     }
 
+    // If the caller wants to move this transaction to a different account,
+    // verify the target account belongs to the same user before touching balances.
+    const newAccountId = accountId ?? existing.accountId;
+    if (accountId && accountId !== existing.accountId) {
+      const target = await prisma.account.findFirst({
+        where: { id: accountId, userId },
+        select: { id: true },
+      });
+      if (!target) {
+        return NextResponse.json({ error: "Account not found" }, { status: 404 });
+      }
+    }
+
     const oldAmount = Number(existing.amount);
     const oldType = existing.type as TxType;
     const newAmount = amount ?? oldAmount;
     const newType = (type as TxType | undefined) ?? oldType;
 
-    // Compute signed delta to apply to account balance
+    // Signed amounts (income +, expense −).
     const oldSigned = oldType === TX_TYPE.INCOME ? oldAmount : -oldAmount;
     const newSigned = newType === TX_TYPE.INCOME ? newAmount : -newAmount;
-    const balanceDiff = newSigned - oldSigned;
+
+    // When the account changes we have to fully reverse the original effect
+    // on the old account and apply the new effect on the new account. When
+    // the account is unchanged a single signed delta is enough.
+    const accountChanged = newAccountId !== existing.accountId;
+    const balanceUpdates = accountChanged
+      ? [
+          prisma.account.update({
+            where: { id: existing.accountId },
+            data: { balance: { increment: -oldSigned } },
+          }),
+          prisma.account.update({
+            where: { id: newAccountId },
+            data: { balance: { increment: newSigned } },
+          }),
+        ]
+      : [
+          prisma.account.update({
+            where: { id: existing.accountId },
+            data: { balance: { increment: newSigned - oldSigned } },
+          }),
+        ];
 
     const [transaction] = await prisma.$transaction([
       prisma.transaction.update({
@@ -122,6 +158,7 @@ export async function PUT(
           ...(type && { type: type as any }),
           ...(amount !== undefined && { amount }),
           ...(date && { date: new Date(date) }),
+          ...(accountId && { accountId: newAccountId }),
           ...(categoryId && { categoryId }),
           ...(memo !== undefined && { memo }),
           ...(merchantName !== undefined && { merchantName }),
@@ -130,10 +167,7 @@ export async function PUT(
         },
         include: TX_INCLUDE,
       }),
-      prisma.account.update({
-        where: { id: existing.accountId },
-        data: { balance: { increment: balanceDiff } },
-      }),
+      ...balanceUpdates,
     ]);
 
     return NextResponse.json({ transaction });

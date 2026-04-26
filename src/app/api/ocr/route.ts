@@ -14,6 +14,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { extractReceipt } from "@/lib/wallet/ocr";
+import { getServerSession } from "@/lib/wallet/auth";
+
+type SessionUser = { id: string };
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -63,6 +66,14 @@ async function persistImage(file: File, buffer: Buffer): Promise<string> {
 // ---------------------------------------------------------------------------
 
 export async function POST(req: NextRequest) {
+  // Auth gate — without this anyone could pump 10MB images through Google
+  // Vision on our quota. Middleware does not protect /api/* routes.
+  const session = await getServerSession();
+  const userId = (session?.user as SessionUser | undefined)?.id;
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const formData = await req.formData();
     const file = formData.get("image");

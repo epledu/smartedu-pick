@@ -93,7 +93,7 @@ export function usePaymentAdvisor({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [merchant, category, amount]);
 
   return { recommendations, isLoading, error };

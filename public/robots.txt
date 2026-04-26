@@ -1,10 +1,17 @@
 User-agent: *
 Allow: /
+# /wallet is an authenticated personal finance dashboard — keep it out of
+# search results so user content cannot leak into Google.
+Disallow: /wallet/
+# NextAuth internals
+Disallow: /api/auth/
 
 User-agent: Mediapartners-Google
 Allow: /
+Disallow: /wallet/
 
 User-agent: Googlebot
 Allow: /
+Disallow: /wallet/
 
 Sitemap: https://smartedu-pick.com/sitemap.xml

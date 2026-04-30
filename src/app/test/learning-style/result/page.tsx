@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     description: '나에게 맞는 공부법과 추천 AI 도구를 확인하세요.',
     url: 'https://smartedu-pick.com/test/learning-style/result',
   },
+  // See sibling result pages — noindex because direct crawls hit the empty
+  // template; real content needs test answers from the user flow.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
+  alternates: { canonical: 'https://smartedu-pick.com/test/learning-style' },
 };
 
 export default function ResultPage() {

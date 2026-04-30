@@ -11,6 +11,12 @@ export const metadata: Metadata = {
     description: '나의 AI 활용 레벨과 맞춤 레벨업 방법을 확인하세요.',
     url: 'https://smartedu-pick.com/test/ai-literacy/result',
   },
+  // Result pages render real content only when the user lands here from the
+  // test flow with answers in URL params/localStorage. A direct crawl sees
+  // the empty template, so we explicitly noindex while still letting OG
+  // metadata work for social shares.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
+  alternates: { canonical: 'https://smartedu-pick.com/test/ai-literacy' },
 };
 
 export default function AIResultPage() {

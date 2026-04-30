@@ -2,16 +2,21 @@ User-agent: *
 Allow: /
 # /wallet is an authenticated personal finance dashboard — keep it out of
 # search results so user content cannot leak into Google.
+# Both forms are listed because /wallet (no slash) and /wallet/* are
+# evaluated separately by most crawlers.
+Disallow: /wallet
 Disallow: /wallet/
 # NextAuth internals
 Disallow: /api/auth/
 
 User-agent: Mediapartners-Google
 Allow: /
+Disallow: /wallet
 Disallow: /wallet/
 
 User-agent: Googlebot
 Allow: /
+Disallow: /wallet
 Disallow: /wallet/
 
 Sitemap: https://smartedu-pick.com/sitemap.xml

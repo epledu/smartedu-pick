@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     description: '우리 아이의 학습 성향과 맞춤 교육법을 확인하세요.',
     url: 'https://smartedu-pick.com/test/child-type/result',
   },
+  // See sibling result pages — noindex because direct crawls hit the empty
+  // template; real content needs test answers from the user flow.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
+  alternates: { canonical: 'https://smartedu-pick.com/test/child-type' },
 };
 
 export default function ChildResultPage() {
